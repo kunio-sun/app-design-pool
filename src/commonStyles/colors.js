@@ -5,6 +5,7 @@ const colors = {
   gray1: "#707070",
   gray2: "#aaaaaa",
   gray3: "#eeeeee",
-  white: "#ffffff"
+  white: "#ffffff",
+  backC: "#fcfcfc"
 }
 export default colors;
