@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logoD from "../images/logo_D.png";
 import { Link } from "react-router-dom";
 import colors from "../commonStyles/colors"
-
+import { useHistory } from "react-router-dom";
 // material ui
 import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -64,6 +64,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const LoginPage = () => {
+  const history = useHistory();
   const classes = useStyles();
 
   // useState フォーム入力情報保持---
@@ -109,11 +110,11 @@ const LoginPage = () => {
       });
       console.log("この値を送信", mailVal, passVal);
       console.log("post結果", res);
-      console.log(res.data.length);
       if (res.data.length === 0) {
         alert("メールアドレス又はパスワードが間違っています");
       } else {
         alert("ログイン成功");
+        history.push("/");
       }
 
     }
