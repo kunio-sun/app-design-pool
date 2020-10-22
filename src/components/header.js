@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -34,6 +34,10 @@ const useStyles = makeStyles(() => ({
   header_logo: {
     width: 'auto',
     height: '40px',
+    transition: 'opacity .3s',
+    '&:hover': {
+      opacity: ".6"
+    }
   },
   header_left: {
     display: 'flex',
@@ -70,11 +74,12 @@ const useStyles = makeStyles(() => ({
   },
   header_buttons: {
     '& Button': {
-      margin: '0 6px'
+      margin: '0 6px',
     }
   },
   bottom_nav: {
     position: "fixed",
+    zIndex: "100",
     bottom: "0",
     left: "0",
     display: "flex",
@@ -83,15 +88,26 @@ const useStyles = makeStyles(() => ({
     padding: "0 34px",
     width: "100%",
     height: "60px",
-    backgroundColor: colors.gray2,
+    boxShadow: "2px 4px 8px #666",
+    backgroundColor: colors.white,
+    "& Button": {
+      marginLeft: "10px"
+    }
+  },
+  Links: {
+    textDecoration: "none"
   }
 }));
 const Head = () => {
   const classes = useStyles();
+
+  // useState フォーム入力情報保持---
+  const [seachKey, setSeachKey] = useState("");
+  const setKey = (event) => {
+    setSeachKey(event.target.value);
+  }
   return (
     <>
-
-
       {/* パソコンサイズ */}
       <MediaQuery query="(min-width:768px)">
         <AppBar className={classes.header} >
@@ -108,20 +124,25 @@ const Head = () => {
                 <InputBace
                   placeholder="design , photo , logo etc"
                   className={classes.InputBace}
+                  onChange={setKey}
                 />
-                <IconButton size="medium" type="submit">
+                <IconButton size="medium" type="submit" onClick={() => alert(seachKey)}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>
             </div>
 
             <div className={classes.header_buttons}>
-              <Button variant="outlined">
-                <Link to="/signUp">sign up</Link>
-              </Button>
-              <Button variant="outlined" color="primary">
-                <Link to="/login">login</Link>
-              </Button>
+              <Link to="/signUp" className={classes.Links}>
+                <Button variant="outlined">
+                  sign up
+                </Button>
+              </Link>
+              <Link to="/login" className={classes.Links}>
+                <Button variant="outlined" color="primary" >
+                  login
+                </Button>
+              </Link>
             </div>
 
           </Toolbar>
@@ -155,7 +176,7 @@ const Head = () => {
 
         <nav className={classes.bottom_nav}>
 
-          <Button variant="contained" >sign up</Button>
+          <Button variant="outlined" >sign up</Button>
           <Button variant="outlined" color="primary">login</Button>
         </nav>
       </MediaQuery>

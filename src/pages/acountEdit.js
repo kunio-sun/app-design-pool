@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logoD from "../images/logo_D.png";
 import { Link } from "react-router-dom";
 
 // maeterialUI
@@ -15,13 +14,20 @@ import axios from "axios";
 //serv 読み込み
 import { serv } from "../serv";
 
+//テスト画像
+import icon02 from "../images/userIcon/user02.jpg";
+
+
 
 const useStyles = makeStyles(() => ({
   Links: {
-    color: colors.gray1,
+    textDecoration: "none",
+    color: colors.gray2,
     transition: "opacity .3s",
+    fontSize: "14px",
     '&:hover': {
-      opacity: ".6"
+      opacity: ".6",
+      textDecoration: "underline"
     }
   },
   contentWrap: {
@@ -36,11 +42,15 @@ const useStyles = makeStyles(() => ({
   signUpWrap: {
     textAlign: "center"
   },
-  logo: {
+  acountImg: {
     display: "block",
     margin: "0 auto",
-    width: "80px",
+    width: "160px",
+    height: "160px",
+    objectFit: "cover",
+    borderRadius: "50%",
     transition: "opacity .3s",
+    cursor: "pointer",
     "&:hover": {
       opacity: ".6",
     }
@@ -65,7 +75,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SignUpPage = () => {
+const AcountEdit = () => {
   const classes = useStyles();
 
   // useState フォーム入力情報保持-----
@@ -156,13 +166,12 @@ const SignUpPage = () => {
   return (
     <div className={classes.contentWrap}>
       <div className={classes.signUpWrap}>
-
-        <Link to="/">
-          <img src={logoD} alt="logo" className={classes.logo} />
-        </Link>
+        <Link to="/profile" className={classes.Links}>ホームへ戻る</Link>
 
         <h2>Create Account</h2>
-        <p>- アカウント作成 -</p>
+        <p>- アカウント編集 -</p>
+
+        <img src={icon02} alt="logo" className={classes.acountImg} />
 
 
         <form className={classes.form}>
@@ -229,11 +238,10 @@ const SignUpPage = () => {
             className={classes.submitButton}
             onClick={registSubmit}
           >
-            Join
+            編集
           </Button>
         </form>
 
-        <Link to="/login" className={classes.Links}>ログイン画面へ</Link>
 
       </div>
     </div>
@@ -241,4 +249,4 @@ const SignUpPage = () => {
 
 }
 
-export default SignUpPage;
+export default AcountEdit;
