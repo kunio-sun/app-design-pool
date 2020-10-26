@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import colors from "../commonStyles/colors";
 import Head from "../components/header";
+import HeadAfterLogin from "../components/headerAfterLogin";
 import { Link } from "react-router-dom";
 
 //テストがぞう
@@ -112,6 +113,7 @@ const ContentPage = () => {
   return (
     <>
       <Head />
+      <HeadAfterLogin />
       <div className={classes.pageWrap}>
         {/* 左側 */}
         <div className={classes.leftWrap}>

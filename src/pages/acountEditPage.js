@@ -75,7 +75,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AcountEdit = () => {
+const AcountEditPage = () => {
   const classes = useStyles();
 
   // useState フォーム入力情報保持-----
@@ -249,4 +249,4 @@ const AcountEdit = () => {
 
 }
 
-export default AcountEdit;
+export default AcountEditPage;

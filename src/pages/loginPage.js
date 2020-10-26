@@ -108,15 +108,14 @@ const LoginPage = () => {
         email: mailVal,
         pass: passVal
       });
-      console.log("この値を送信", mailVal, passVal);
-      console.log("post結果", res);
-      if (res.data.length === 0) {
-        alert("メールアドレス又はパスワードが間違っています");
-      } else {
+      // console.log("この値を送信", mailVal, passVal);
+      // console.log("post結果", res);
+      if (res.data) {
         alert("ログイン成功");
         history.push("/");
+      } else {
+        alert("メールアドレス又はパスワードが間違っています");
       }
-
     }
   }
 

@@ -7,7 +7,7 @@ import LoginPage from './pages/loginPage';
 import ContentPage from './pages/contentPage';
 import PortfolioPage from './pages/portfolioPage';
 import ProfilePage from './pages/profilePage';
-import AcountEdit from './pages/acountEdit';
+import AcountEditPage from './pages/acountEditPage';
 import PoolingPage from './pages/poolingPage';
 
 const App = () => {
@@ -21,7 +21,7 @@ const App = () => {
           <Route path="/content" component={ContentPage}></Route>
           <Route path="/portfolio" component={PortfolioPage}></Route>
           <Route path="/profile" component={ProfilePage}></Route>
-          <Route path="/acountEdit" component={AcountEdit}></Route>
+          <Route path="/acountEdit" component={AcountEditPage}></Route>
           <Route path="/pooling" component={PoolingPage}></Route>
         </Switch>
       </Router>

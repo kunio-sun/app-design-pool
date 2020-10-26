@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import colors from "../commonStyles/colors";
 import Head from "../components/header";
+import HeadAfterLogin from "../components/headerAfterLogin";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +35,7 @@ const ContentPage = () => {
   return (
     <>
       <Head />
+      <HeadAfterLogin />
       <div className={classes.pageWrap}>
         <div className={classes.test}>
           <p>これはコンテンツ<span>ページ</span>です</p>

@@ -20,10 +20,14 @@ import logoD from "../images/logo_D.png";
 //style color
 import colors from "../commonStyles/colors";
 
+import polingButton from "../images/poling_button.png";
+import profileButton from "../images/profile_button.png";
+
 const useStyles = makeStyles(() => ({
   header: {
-    display: 'flex',
+    display: "flex",
     justifyContent: 'center',
+    marginTop: "80px",
     height: '80px',
     backgroundColor: colors.white,
   },
@@ -74,14 +78,16 @@ const useStyles = makeStyles(() => ({
 
   },
   header_buttons: {
-    '& Button': {
+    display: "flex",
+    justifyContent: "center",
+    '& img': {
       margin: '0 6px',
     }
   },
   bottom_nav: {
     position: "fixed",
     zIndex: "100",
-    bottom: "0",
+    bottom: "60px",
     left: "0",
     display: "flex",
     alignItems: "center",
@@ -97,15 +103,9 @@ const useStyles = makeStyles(() => ({
   },
   Links: {
     textDecoration: "none"
-  },
-  bottomLeftButton: {
-    textDecoration: "none",
-  },
-  bottomRightButton: {
-    textDecoration: "none"
   }
 }));
-const Head = () => {
+const HeadAfterLogin = () => {
   const classes = useStyles();
 
   // useState フォーム入力情報保持---
@@ -140,15 +140,11 @@ const Head = () => {
             </div>
 
             <div className={classes.header_buttons}>
-              <Link to="/signUp" className={classes.Links}>
-                <Button variant="outlined">
-                  sign up
-                </Button>
+              <Link to="/pooling" className={classes.Links}>
+                <img src={polingButton} alt="pooling button" />
               </Link>
-              <Link to="/login" className={classes.Links}>
-                <Button variant="outlined" color="primary" >
-                  login
-                </Button>
+              <Link to="/profile" className={classes.Links}>
+                <img src={profileButton} alt="プロフィールボタン" />
               </Link>
             </div>
 
@@ -182,21 +178,20 @@ const Head = () => {
         </AppBar>
 
         <nav className={classes.bottom_nav}>
-          <Link to="/signUp" className={classes.bottomLeftButton}>
+          <Link to="/profile" className={classes.Links}>
             <Button variant="outlined">
-              sign up
+              profile
             </Button>
           </Link>
-          <Link to="/login" className={classes.bottomRightButton}>
+          <Link to="/pooling" className={classes.Links}>
             <Button variant="outlined" color="primary" >
-              login
+              pooling
             </Button>
           </Link>
         </nav>
-
       </MediaQuery>
     </>
   )
 }
 
-export default Head;
+export default HeadAfterLogin;
