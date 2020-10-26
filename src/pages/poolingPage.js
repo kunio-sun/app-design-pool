@@ -228,6 +228,10 @@ const PoolingPage = () => {
   });
 
 
+  const imagePostTest = () => {
+    alert("画像だけinsert処理");
+  }
+
 
   return (
     <>
@@ -339,6 +343,13 @@ const PoolingPage = () => {
           className={classes.postButton}
           variant="outlined"
         >投稿</Button>
+
+        <Button
+          className={classes.postButton}
+          variant="outlined"
+          color="secondary"
+          onClick={imagePostTest}
+        >画像insertだけテストボタン</Button>
       </div>
     </>
   );

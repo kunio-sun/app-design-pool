@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import logoD from "../images/logo_D.png";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // maeterialUI
 import { TextField } from "@material-ui/core";
@@ -67,6 +68,7 @@ const useStyles = makeStyles(() => ({
 
 const SignUpPage = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   // useState フォーム入力情報保持-----
   const [mailVal, setFunc] = useState("");
@@ -96,6 +98,11 @@ const SignUpPage = () => {
       mailField.innerHTML = "mailアドレス欄が入力されていません";
       mailField.style.color = colors.errC;
       submitFlag++;
+    } else if (!/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/.test(mailVal)) {
+      const mailField = document.getElementById("mailErrField");
+      mailField.innerHTML = "メールアドレスを入力してください";
+      mailField.style.color = colors.errC;
+      submitFlag++;
     } else {
       const mailField = document.getElementById("mailErrField");
       mailField.innerHTML = "メールアドレス";
@@ -119,6 +126,11 @@ const SignUpPage = () => {
       passField.innerHTML = "password欄が入力されていません";
       passField.style.color = colors.errC;
       submitFlag++;
+    } else if (passVal.length < 8) {
+      const passField = document.getElementById("passErrField");
+      passField.innerHTML = "passwordは必ず8文字以上で入力してください";
+      passField.style.color = colors.errC;
+      submitFlag++;
     } else {
       const passField = document.getElementById("passErrField");
       passField.innerHTML = "半角英数8文字以上";
@@ -130,7 +142,7 @@ const SignUpPage = () => {
       pass2Field.innerHTML = "password1と同じ値を入力してください";
       pass2Field.style.color = colors.errC;
       submitFlag++;
-      console.log(passVal + "と" + pass2Val);
+      // console.log(passVal + "と" + pass2Val);
     } else {
       const pass2Field = document.getElementById("pass2ErrField");
       pass2Field.innerHTML = "半角英数8文字以上";
@@ -146,8 +158,14 @@ const SignUpPage = () => {
         password: passVal
       });
       console.log("post結果", res);
+      if (res.data === "email重複") {
+        alert("既に登録されているメールアドレスです");
+      } else {
+        alert("アカウント作成に成功しました");
+        history.push("/");
+      }
     }
-    console.log(submitFlag);
+    // console.log(submitFlag);
   }
 
 

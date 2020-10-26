@@ -159,7 +159,9 @@ const HeadAfterLogin = () => {
         <AppBar className={classes.header} >
           <Toolbar className={classes.header_bar}>
             <div className={classes.header_left}>
-              <img src={logoD} alt="ロゴ" className={classes.header_logo} />
+              <Link to="/">
+                <img src={logoD} alt="ロゴ" className={classes.header_logo} />
+              </Link>
               <Paper
                 className={classes.Input_PaperT}
                 elevation={0}
