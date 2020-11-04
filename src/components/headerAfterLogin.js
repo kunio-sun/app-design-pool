@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -107,6 +107,7 @@ const useStyles = makeStyles(() => ({
 }));
 const HeadAfterLogin = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   // useState フォーム入力情報保持---
   const [seachKey, setSeachKey] = useState("");
@@ -120,7 +121,7 @@ const HeadAfterLogin = () => {
         <AppBar className={classes.header} >
           <Toolbar className={classes.header_bar}>
             <div className={classes.header_left}>
-              <Link to="/">
+              <Link to="/home">
                 <img src={logo} alt="ロゴ" className={classes.header_logo} />
               </Link>
               <Paper
@@ -133,7 +134,7 @@ const HeadAfterLogin = () => {
                   className={classes.InputBace}
                   onChange={setKey}
                 />
-                <IconButton size="medium" type="submit" onClick={() => alert(seachKey)}>
+                <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>
@@ -159,7 +160,7 @@ const HeadAfterLogin = () => {
         <AppBar className={classes.header} >
           <Toolbar className={classes.header_bar}>
             <div className={classes.header_left}>
-              <Link to="/">
+              <Link to="/home">
                 <img src={logoD} alt="ロゴ" className={classes.header_logo} />
               </Link>
               <Paper
@@ -171,7 +172,7 @@ const HeadAfterLogin = () => {
                   placeholder="design , photo , logo etc"
                   className={classes.InputBaceT}
                 />
-                <IconButton size="medium" type="submit">
+                <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>

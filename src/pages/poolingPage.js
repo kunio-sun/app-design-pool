@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import colors from "../commonStyles/colors";
 import Head from "../components/header";
-import Add from '@material-ui/icons/Add';
+import Lodash from "lodash";
+import { useHistory } from "react-router-dom";
 
+import { makeStyles } from "@material-ui/core/styles";
+import Add from '@material-ui/icons/Add';
 import Button from "@material-ui/core/Button";
 import Input from '@material-ui/core/Input';
 import IconButton from "@material-ui/core/IconButton";
 import Close from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 
+import { serv } from "../serv";
+import Axios from 'axios';
+
 import { useDropzone } from 'react-dropzone';
 
 // import DummyWhite from "../images/dummyWhite.png";
+// import DummyBlack from "../images/backGradient.png";
 
 
 
@@ -118,14 +124,15 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   imagePreviewWrap: {
-    marginTop: "16px",
-    marginBottom: "16px"
+    marginTop: "2px",
+    marginBottom: "12px"
   },
   imagePreview: {
     // display: "block",
     // margin: "0 auto",
     width: "100%",
-    maxWidth: "380px"
+    maxWidth: "240px",
+
   },
   rejectionsBlock: {
     paddingTop: "12px",
@@ -154,29 +161,28 @@ const useStyles = makeStyles((theme) => ({
 const PoolingPage = () => {
   // usestyle
   const classes = useStyles();
+  const history = useHistory();
 
 
   let [tagValue, setTagValue] = useState("");
   const changeTagValue = (event) => {
     setTagValue(event.target.value);
   }
-  const [textVal, setTtextVal] = useState(0);
-  const changeTextVal = (event) => {
-    setTtextVal(event.target.value.length);
+  const [textValue, setTextValue] = useState("")
+  const [textLength, setTtextLength] = useState(0);
+  const changeTextLength = (event) => {
+    setTtextLength(event.target.value.length);
+    setTextValue(event.target.value);
   }
   const countDisplay = () => {
-    document.getElementById("numberDisplay").innerHTML = textVal;
+    document.getElementById("numberDisplay").innerHTML = textLength;
   }
 
 
 
   var initialTagArray = [
-    {
-      tagName: "test"
-    },
-    {
-      tagName: "secondTag"
-    },
+    "kunio092",
+    "portfolio",
   ]
   const [tags, setTags] = useState(initialTagArray);
 
@@ -186,14 +192,13 @@ const PoolingPage = () => {
       alert("タグ名を入力してください");
       return
     }
-    setTags(tags => [...tags, {
-      tagName: tagValue
-    }]);
+    setTags(tags => [...tags, tagValue]);
 
     // 入力値リセット
     document.getElementById("tagField").value = "";
     setTagValue("");
   }
+
   const removeTag = (index) => {
     // alert(index + 1 + "番目を消去");
     const newTags = [...tags];
@@ -202,18 +207,28 @@ const PoolingPage = () => {
   }
 
 
+
+
   const [files, setFiles] = useState([]);
   const onDrop = (acceptedFiles) => {
-    // console.log('onDropppppppppppppppppppppppp');
-    // previewの追加
-    setFiles(acceptedFiles.map(
-      file => Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      })));
+    console.log("画像がドロップされました");
+    setFiles(acceptedFiles.map((file) => Object.assign(file, {
+      preview: URL.createObjectURL(file)
+    })));
   }
 
+  const preview = files.map((file, index) => (
+    <div key={index} className={classes.imagePreviewWrap}>
+      <img
+        src={file.preview} alt="プレビュー画像"
+        className={classes.imagePreview}
+        id="imagePreviewArea"
+      />
+    </div>
+  ))
+
   const {
-    // acceptedFiles,
+    acceptedFiles,
     fileRejections,
     getRootProps,
     getInputProps,
@@ -221,16 +236,73 @@ const PoolingPage = () => {
     isDragAccept,
     isDragReject
   } = useDropzone({
+    maxFilesize: 0.5,
+    onDrop,
     accept: 'image/jpeg, image/png',
     maxFiles: 1,
-
-    onDrop
   });
 
+  const imagePost = () => {
+    if (acceptedFiles.length === 0) {
+      alert("画像が選択されていません");
+      return //未送信
+    }
+    if (textValue === "") {
+      alert("投稿テキストが入力されていません");
+      return //未送信
+    }
+    if (tags.length === 0) {
+      alert("tagは必ず1つ以上入力してください");
+      return //未送信
+    }
 
-  const imagePostTest = () => {
-    alert("画像だけinsert処理");
-  }
+    let date = new Date();
+    date.setTime(date.getTime() + 3240000); // 1000 * 60 * 60 * 9(hour)
+    const year = String(date.getFullYear());
+    const month = ("0" + String(date.getMonth() + 1)).slice(-2);
+    const day = ("0" + String(date.getDate())).slice(-2);
+    const hour = ("0" + String(date.getHours() - 1)).slice(-2);
+    const minutes = ("0" + String(date.getMinutes())).slice(-2);
+    const second = ("0" + String(date.getSeconds())).slice(-2);
+    const unipuePostId = year + month + day + hour + minutes + second + "U";
+
+    let sendParamsAtherFile = {
+      postText: textValue,
+      tagArray: tags,
+    }
+
+
+    const formData = new FormData();
+    Lodash.forEach(sendParamsAtherFile, (value, key) => {
+      if (Array.isArray(value)) {
+        Lodash.forEach(value, (v, Lodash) => {
+          formData.append(key + '[]', v)
+        })
+      } else {
+        formData.append(key, value);
+      }
+    })
+    formData.append("file", acceptedFiles[0], unipuePostId);
+
+    const headers = { "content-type": "multipart/form-data" };
+
+    Axios.post(
+      serv + "imagePost",
+      formData,
+      { headers })
+      .then((res) => {
+        console.log(res)
+        if (res.data === "成功") {
+          alert("投稿完了");
+          history.push("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
+  } // end imagePost
+
 
 
   return (
@@ -238,7 +310,7 @@ const PoolingPage = () => {
       <Head />
       <div className={classes.pageWrap}>
         <div>
-          <Button variant="contained" onClick={() => console.log(tags)}>今のtags値</Button>
+          {/* <Button variant="contained" onClick={() => console.log(tags)}>今のtags値</Button> */}
         </div>
         <p><span className={classes.accent}>※</span> タグ検索の為、複数タグ使用推奨</p>
         <div className={classes.addTagWrap}>
@@ -249,7 +321,7 @@ const PoolingPage = () => {
         <ul className={classes.TagList}>
           {tags.map((tag, index) => (
             <li key={index}>
-              <span className={classes.tagName}>{tag.tagName}</span>
+              <span className={classes.tagName}>{tag}</span>
               <IconButton size="small" onClick={() => removeTag(index)}>
                 <Close />
               </IconButton>
@@ -266,7 +338,7 @@ const PoolingPage = () => {
             multiline
             // rows="3"
             inputProps={{ maxLength: 160 }}
-            onChange={changeTextVal}
+            onChange={changeTextLength}
             onKeyUp={countDisplay}
           />
           <p className={classes.textLimit}><span id="numberDisplay">0</span> / 160</p>
@@ -275,28 +347,24 @@ const PoolingPage = () => {
 
 
         {/* 受付データ画像表示 */}
-        {/* <div>
+        <div>
           {acceptedFiles.map((file, index) => (
             <div key={index}>
               {file.path}
             </div>
           ))}
-        </div> */}
-        {files.map((file, index) => (
-          <div key={index} className={classes.imagePreviewWrap}>
-            <img
-              src={file.preview} alt="プレビュー画像"
-              className={classes.imagePreview}
-              id="imagePreviewArea"
-            />
-          </div>
-        ))}
+          {preview}
+        </div>
+
+
+
+
 
 
         {/* ドロップゾーン */}
         <div className={classes.areaBack}>
           <div {...getRootProps({ className: 'dropzone' })} className={classes.dropArea}>
-            <input {...getInputProps()} />
+            <input {...getInputProps()} type="file" />
             {!isDragActive && (
               <p>
                 このエリアに画像をドロップ<br />
@@ -313,6 +381,7 @@ const PoolingPage = () => {
           </div>
         </div>
 
+
         {/* 画像じゃない物or複数選択で表示 */}
         {fileRejections.map(({ file, errors }) => (
           <div key={file.path} className={classes.rejectionsBlock}>
@@ -321,7 +390,7 @@ const PoolingPage = () => {
             <span className={classes.accent}>{file.path}</span><br />
             {errors.map(e => (
               <span key={e.code}>
-                {/* {e.code + ":" + e.message}<br /> */}
+                {/* {e.code + ":" + e.message}<br /> */}ƒ
                 {
                   (() => {
                     if (e.code === "file-invalid-type") {
@@ -337,19 +406,13 @@ const PoolingPage = () => {
           </div>
         ))}
 
-        {/* <Button variant="outlined" onClick={() => { console.log(acceptedFiles) }}>ファイル内容表示</Button> */}
 
         <Button
           className={classes.postButton}
           variant="outlined"
+          onClick={imagePost}
         >投稿</Button>
 
-        <Button
-          className={classes.postButton}
-          variant="outlined"
-          color="secondary"
-          onClick={imagePostTest}
-        >画像insertだけテストボタン</Button>
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import { useHistory } from "react-router-dom";
 
 // react responsive
 import MediaQuery from "react-responsive";
@@ -19,6 +20,7 @@ import logo from "../images/logo_designpool_normal.png";
 import logoD from "../images/logo_D.png";
 //style color
 import colors from "../commonStyles/colors";
+
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -107,6 +109,7 @@ const useStyles = makeStyles(() => ({
 }));
 const Head = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   // useState フォーム入力情報保持---
   const [seachKey, setSeachKey] = useState("");
@@ -120,7 +123,7 @@ const Head = () => {
         <AppBar className={classes.header} >
           <Toolbar className={classes.header_bar}>
             <div className={classes.header_left}>
-              <Link to="/">
+              <Link to="/home">
                 <img src={logo} alt="ロゴ" className={classes.header_logo} />
               </Link>
               <Paper
@@ -133,7 +136,7 @@ const Head = () => {
                   className={classes.InputBace}
                   onChange={setKey}
                 />
-                <IconButton size="medium" type="submit" onClick={() => alert(seachKey)}>
+                <IconButton size="medium" /* type="submit" */ onClick={() => history.push("/home" + seachKey)}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>
@@ -163,7 +166,7 @@ const Head = () => {
         <AppBar className={classes.header} >
           <Toolbar className={classes.header_bar}>
             <div className={classes.header_left}>
-              <Link to="/">
+              <Link to="/home">
                 <img src={logoD} alt="ロゴ" className={classes.header_logo} />
               </Link>
               <Paper
@@ -175,7 +178,7 @@ const Head = () => {
                   placeholder="design , photo , logo etc"
                   className={classes.InputBaceT}
                 />
-                <IconButton size="medium" type="submit">
+                <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>

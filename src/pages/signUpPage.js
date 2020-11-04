@@ -162,7 +162,7 @@ const SignUpPage = () => {
         alert("既に登録されているメールアドレスです");
       } else {
         alert("アカウント作成に成功しました");
-        history.push("/");
+        history.push("/home");
       }
     }
     // console.log(submitFlag);
@@ -175,7 +175,7 @@ const SignUpPage = () => {
     <div className={classes.contentWrap}>
       <div className={classes.signUpWrap}>
 
-        <Link to="/">
+        <Link to="/home">
           <img src={logoD} alt="logo" className={classes.logo} />
         </Link>
 

@@ -15,14 +15,15 @@ const App = () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/" component={TopPage}></Route>
-          <Route path="/signUp" component={SignUpPage}></Route>
-          <Route path="/login" component={LoginPage}></Route>
-          <Route path="/content" component={ContentPage}></Route>
-          <Route path="/portfolio" component={PortfolioPage}></Route>
-          <Route path="/profile" component={ProfilePage}></Route>
-          <Route path="/acountEdit" component={AcountEditPage}></Route>
-          <Route path="/pooling" component={PoolingPage}></Route>
+          <Route exact path="/home" component={TopPage}></Route>
+          <Route exact path="/home:seachKey" component={TopPage}></Route>
+          <Route exact path="/signUp" component={SignUpPage}></Route>
+          <Route exact path="/login" component={LoginPage}></Route>
+          <Route exact path="/content" component={ContentPage}></Route>
+          <Route exact path="/portfolio" component={PortfolioPage}></Route>
+          <Route exact path="/profile" component={ProfilePage}></Route>
+          <Route exact path="/acountEdit" component={AcountEditPage}></Route>
+          <Route exact path="/pooling" component={PoolingPage}></Route>
         </Switch>
       </Router>
     </div >

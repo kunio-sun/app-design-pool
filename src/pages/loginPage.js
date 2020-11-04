@@ -112,7 +112,7 @@ const LoginPage = () => {
       // console.log("post結果", res);
       if (res.data) {
         alert("ログイン成功");
-        history.push("/");
+        history.push("/home");
       } else {
         alert("メールアドレス又はパスワードが間違っています");
       }
@@ -124,7 +124,7 @@ const LoginPage = () => {
 
 
       <div className={classes.loginWrap}>
-        <Link to="/">
+        <Link to="/home">
           <img src={logoD} alt="logo" className={classes.logo} />
         </Link>
 
