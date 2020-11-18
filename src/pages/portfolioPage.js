@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import colors from "../commonStyles/colors";
 import Head from "../components/header";
 import Button from "@material-ui/core/Button";
 import Send from '@material-ui/icons/Send';
+import { useParams } from "react-router-dom";
 
-import PostList from "../components/postList";
+import PostListUserDetail from "../components/PostListUserDetail"
 
+import { serv } from "../serv";
 //テスト画像
-import icon02 from "../images/userIcon/user02.jpg";
+import dummyIcon from "../images/userIcon/user02.jpg";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   pageWrap: {
@@ -33,12 +36,14 @@ const useStyles = makeStyles((theme) => ({
       height: "180px",
       objectFit: "cover",
       borderRadius: "50%",
-    },
-    '& Button': {
-      width: "320px",
-      height: "40px",
-      borderRadius: "20px"
-    },
+      boxShadow: "1px 1px 8px " + colors.gray3,
+    }
+  },
+  mailButton: {
+    width: "320px",
+    height: "40px",
+    borderRadius: "20px"
+
   },
   userMail: {
     margin: "16px 0 12px",
@@ -69,28 +74,70 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PortfolioPage = () => {
-  // usestyle
+  const { userId } = useParams();
   const classes = useStyles();
+  const initializeUserInfo = {
+    user_id: 1,
+    icon: "InitializeIcon.png",
+    mail: "loadingNow@gmail.com",
+    name: "loadingNow",
+    profile: "--- LoadingNow --- LoadingNow --- LoadingNow ---"
+  }
+  const [userInfo, setUserInfo] = useState(initializeUserInfo);
+  const [icon, setIcon] = useState(dummyIcon);
+
+
+
+  useEffect(() => {
+    // console.log("表示するuserのidは" + userId);
+    Axios.get(serv + "getUserInfo?userId=" + userId)
+      .then(res => {
+        // console.log("reaponseDataは", res.data);
+        setUserInfo(res.data);
+        getIconFile(res.data.icon);
+      })
+      .catch(console.error);
+
+    const getIconFile = (iconName) => {
+      // console.log("とってくるアイコン名は", iconName);
+      Axios.get(serv + "getIconFile?icon=" + iconName, { responseType: "blob" })
+        .then(res => {
+          const reader = new FileReader();
+          reader.readAsDataURL(res.data);
+          reader.onload = () => {
+            const imageDataUrl = reader.result;
+            setIcon(imageDataUrl);
+          }
+        })
+        .catch(console.error)
+    } // end getIconFile()
+
+  }, [userId]);
+
+
   return (
     <>
       <Head />
       <div className={classes.pageWrap}>
         <div className={classes.userwrap}>
-          <img src={icon02} alt="ユーザーアイコン" />
-          <h2>kunio092</h2>
-          <p className={classes.userMail}>kunio092@gmail.com</p>
+          <img src={icon} alt="ユーザーアイコン" />
+          <h2>{userInfo.name}</h2>
+          <p className={classes.userMail}>{userInfo.mail}</p>
 
-          <Button variant="outlined" color="default"
-            endIcon={<Send />}>
+
+          <Button
+            className={classes.mailButton}
+            variant="outlined"
+            color="default"
+            endIcon={<Send />}
+            href={"mailto:" + userInfo.mail}
+          >
             メール送信
           </Button>
-          <p className={classes.userText}>デザイン受注いつでも承っております。得意ジャンルはDTPデザイン、webデザイン、logoデザイン。今まで受注製作させていただいた作品で公開可能な物や自主制作してきた作品、コンテスト応募で作成した物をポートフォリオとして投稿する為にdesign poolを利用させて頂きました。お仕事の依頼はお手数ですがメールアドレスまでお願いいたします。</p>
+          <p className={classes.userText}>{userInfo.profile}</p>
         </div>
 
-        <PostList />
-        <div className={classes.test}>
-          <p>これはportfolio<span>ページ</span>です</p>
-        </div>
+        <PostListUserDetail />
       </div>
     </>
   );

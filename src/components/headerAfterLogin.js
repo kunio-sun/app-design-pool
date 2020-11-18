@@ -144,7 +144,7 @@ const HeadAfterLogin = () => {
               <Link to="/pooling" className={classes.Links}>
                 <img src={polingButton} alt="pooling button" />
               </Link>
-              <Link to="/profile" className={classes.Links}>
+              <Link to={"/profile" + 16} className={classes.Links}>
                 <img src={profileButton} alt="プロフィールボタン" />
               </Link>
             </div>
@@ -171,6 +171,7 @@ const HeadAfterLogin = () => {
                 <InputBace
                   placeholder="design , photo , logo etc"
                   className={classes.InputBaceT}
+                  onChange={setKey}
                 />
                 <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
                   <SeachIcon fontSize="small" />
@@ -181,7 +182,7 @@ const HeadAfterLogin = () => {
         </AppBar>
 
         <nav className={classes.bottom_nav}>
-          <Link to="/profile" className={classes.Links}>
+          <Link to={"/profile" + 16} className={classes.Links}>
             <Button variant="outlined">
               profile
             </Button>

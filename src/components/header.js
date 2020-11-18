@@ -177,8 +177,9 @@ const Head = () => {
                 <InputBace
                   placeholder="design , photo , logo etc"
                   className={classes.InputBaceT}
+                  onChange={setKey}
                 />
-                <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
+                <IconButton size="medium" onClick={() => { history.push("/home" + seachKey) }}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>

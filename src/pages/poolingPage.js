@@ -211,7 +211,8 @@ const PoolingPage = () => {
 
   const [files, setFiles] = useState([]);
   const onDrop = (acceptedFiles) => {
-    console.log("画像がドロップされました");
+    // console.log("画像がドロップされました");
+    // console.log(acceptedFiles[0]);
     setFiles(acceptedFiles.map((file) => Object.assign(file, {
       preview: URL.createObjectURL(file)
     })));
@@ -284,22 +285,20 @@ const PoolingPage = () => {
     })
     formData.append("file", acceptedFiles[0], unipuePostId);
 
+    // console.log("投稿データは----------", formData);
     const headers = { "content-type": "multipart/form-data" };
-
     Axios.post(
       serv + "imagePost",
       formData,
       { headers })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data === "成功") {
           alert("投稿完了");
           history.push("/");
         }
       })
-      .catch((err) => {
-        console.log(err)
-      })
+      .catch(console.err)
 
   } // end imagePost
 

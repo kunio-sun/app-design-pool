@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Masonry from "react-masonry-css";
 import colors from "../commonStyles/colors"
-import { Link, useParams } from "react-router-dom";
+import { /* Link, */ useParams } from "react-router-dom";
 import axios from "axios";
 import { serv } from "../serv"
 
@@ -43,15 +43,15 @@ const ImageOnlyPostList = () => {
   const [iterateLastImage, setIterateLastImage] = useState("");
 
   // app.jsのroute パス :keyNameを指定(props)
-  const { seachKey } = useParams();
-
+  const { userId } = useParams();
   useEffect(() => {
     // imageViewの初期化
+    // console.log("検索するuserIdは" + userId)
     setImages([]);
 
     // console.log('---useEffectが実行されました---')
-    // console.log("検索パラメータは", seachKey);
-    axios.get(serv + "getImageName?seachKey=" + seachKey)
+    // console.log("検索パラメータは", userId);
+    axios.get(serv + "getUserPostImage?userId=" + userId)
       .then((res) => {
         // console.log("reaponseDataは", res.data);
         res.data.forEach((obj, index) => {
@@ -66,19 +66,16 @@ const ImageOnlyPostList = () => {
         });
       })
       .catch(console.error);
-  }, [seachKey]);
-  //,[]でuseeffectの記述が更新されても呼び出されず最初だけ呼ばれる
-  //正確には多分seachKeyの変更により発火する物と思われる
+  }, [userId]);
 
 
-  // getImage
   const getImageNext = () => {
     // console.log("次の14件の画像を取得")
     // axios.get(serv + "getImageNext?lastImageName=" + iterateLastImage)
-    axios.get(serv + "getImageNext", {
+    axios.get(serv + "getUserPostImageNext", {
       params: {
         lastImageName: iterateLastImage,
-        seachKey
+        userId
       }
     })
       .then((res) => {
@@ -132,7 +129,6 @@ const ImageOnlyPostList = () => {
       {/* <Button variant="contained" color="secondary" onClick={() => console.log(iterateLastImage)}>取得最後の画像</Button> */}
       {/* <Button variant="contained" color="default" onClick={() => console.log(images)}>images配列取得</Button> */}
 
-
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className={classes.my_masonry_grid}
@@ -142,9 +138,9 @@ const ImageOnlyPostList = () => {
         {images.map((row, index) => (
           <div className={classes.event_card} key={index}>
 
-            <Link to={"/content" + row.imageName}>
-              <img src={row.imageData} alt={"画像" + row.imageName} className={classes.postImage} />
-            </Link>
+            {/* <Link to={"/content" + row.imageName}> */}
+            <img src={row.imageData} alt={"画像" + row.imageName} className={classes.postImage} />
+            {/* </Link> */}
           </div>
         ))}
       </Masonry>
@@ -156,6 +152,7 @@ const ImageOnlyPostList = () => {
         onClick={() => getImageNext()}>
         さらに表示</Button>
 
+      <h1>これは、ユーザ投稿詳細用のコンポーネントです</h1>
     </>
   );
 }

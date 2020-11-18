@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useHistory } from "react-router-dom";
 
 // maeterialUI
 import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import SettingsIcon from "@material-ui/icons/Settings"
 
 import colors from "../commonStyles/colors";
 
@@ -15,12 +16,14 @@ import axios from "axios";
 import { serv } from "../serv";
 
 //テスト画像
-import icon02 from "../images/userIcon/user02.jpg";
+import dummyIcon from "../images/iconLoading.png";
 
 
 
 const useStyles = makeStyles(() => ({
   Links: {
+    display: "block",
+    marginTop: "40px",
     textDecoration: "none",
     color: colors.gray2,
     transition: "opacity .3s",
@@ -31,40 +34,70 @@ const useStyles = makeStyles(() => ({
     }
   },
   contentWrap: {
+
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     minHeight: "100vh",
     minWidth: "100%",
     backgroundColor: colors.backC,
+    // backgroundColor: "#cba",
     color: colors.gray1,
   },
   signUpWrap: {
+    // backgroundColor: "#abc",
+    minWidth: "350px",
+    width: "80%",
+    maxWidth: "580px",
     textAlign: "center"
   },
+  iconLabel: {
+    position: "relative",
+    display: "block",
+    width: "160px",
+    height: "160px",
+    margin: "0 auto"
+  },
   acountImg: {
+    position: "absolute",
+    zIndex: "1",
     display: "block",
     margin: "0 auto",
     width: "160px",
     height: "160px",
     objectFit: "cover",
     borderRadius: "50%",
+    boxShadow: "1px 1px 8px " + colors.gray3,
     transition: "opacity .3s",
     cursor: "pointer",
     "&:hover": {
-      opacity: ".6",
+      opacity: ".4",
     }
+  },
+  settingIcon: {
+    position: "absolute",
+    top: "50%",
+    left: "50a%",
+    transform: "translate(-50%,-50%)",
+    fontSize: "100px",
   },
   form: {
     display: "flex",
     flexDirection: "column",
     justifyContent: " space-around",
-    width: "400px",
-    minHeight: "430px",
-    margin: "24px 0 24px 0"
+    // backgroundColor: "orange",
+    minHeight: "520px",
+    margin: "24px 0 24px 0",
+  },
+  IconInput: {
+    display: "none"
+  },
+  TextFieldWrap: {
+    margin: "9px 0"
   },
   submitButton: {
     marginTop: "16px",
+    marginBottom: "80px",
     color: colors.gray1
   },
   errField: {
@@ -73,27 +106,88 @@ const useStyles = makeStyles(() => ({
     fontSize: "12px",
     padding: "2px 0 0 16px"
   },
+  profileText: {
+    marginTop: "8px",
+    width: "100%"
+  }
 }));
 
 const AcountEditPage = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const { userId } = useParams();
+
+  const initializeUserInfo = {
+    user_id: 1,
+    icon: "InitializeIcon.png",
+    mail: "loadingNow@gmail.com",
+    name: "loadingNow",
+    profile: "--- LoadingNow --- LoadingNow --- LoadingNow ---"
+  }
+  const [userInfo, setUserInfo] = useState(initializeUserInfo);
+  const [file, setFile] = useState(dummyIcon);
+  const [icon, setIcon] = useState(dummyIcon)
+
+  const changeFile = (event) => {
+    const file = event.target.files[0];
+    const previwIcon = URL.createObjectURL(file);
+    // console.log("送るファイルdata", file);
+    setFile(file);
+    setIcon(previwIcon)
+  }
+
+  useEffect(() => {
+    // console.log("送られ得てきたuserIdは", userId);
+
+    axios.get(serv + "getUserInfo?userId=" + userId)
+      .then(res => {
+        // console.log("上のuserInfo", res.data);
+        setUserInfo(res.data);
+        getIconFile(res.data.icon);
+      })
+      .catch(console.error);
+
+    const getIconFile = (iconName) => {
+      // console.log("とってくるアイコン名は", iconName);
+      axios.get(serv + "getIconFile?icon=" + iconName, { responseType: "blob" })
+        .then(res => {
+          const reader = new FileReader();
+          reader.readAsDataURL(res.data);
+          reader.onload = () => {
+            const imageDataUrl = reader.result;
+            setIcon(imageDataUrl);
+          }
+        })
+        .catch(console.error)
+    } // end getIconFile()
+  }, [userId])
 
   // useState フォーム入力情報保持-----
-  const [mailVal, setFunc] = useState("");
   const setMailval = (event) => {
-    setFunc(event.target.value);
+    const targetValue = event.target.value;
+    setUserInfo((userInfo) => { return { ...userInfo, mail: targetValue } });
+
   }
-  const [nameVal, setName] = useState("");
   const setNameval = (event) => {
-    setName(event.target.value);
+    const targetValue = event.target.value;
+    setUserInfo((userInfo) => { return { ...userInfo, name: targetValue } });
   }
-  const [passVal, setPass] = useState("");
   const setPassval = (event) => {
-    setPass(event.target.value);
+    const targetValue = event.target.value;
+    setUserInfo((userInfo) => { return { ...userInfo, pass1: targetValue } });
   }
-  const [pass2Val, setPass2] = useState("");
   const setPass2val = (event) => {
-    setPass2(event.target.value);
+    const targetValue = event.target.value;
+    setUserInfo((userInfo) => { return { ...userInfo, pass2: targetValue } });
+  }
+  const setProfile = (event) => {
+    const targetValue = event.target.value;
+    setUserInfo((userInfo) => { return { ...userInfo, profile: targetValue } })
+  }
+
+  const setProfileLength = () => {
+    const length = userInfo.profile.length;
+    document.getElementById("numberDisplay").innerHTML = length;
   }
 
 
@@ -101,63 +195,97 @@ const AcountEditPage = () => {
   const registSubmit = async () => {
     let submitFlag = 0;
 
-    if (!mailVal) {
-      const mailField = document.getElementById("mailErrField");
+    const mailField = document.getElementById("mailErrField");
+    if (!userInfo.mail) {
       mailField.innerHTML = "mailアドレス欄が入力されていません";
       mailField.style.color = colors.errC;
       submitFlag++;
+    } else if (!/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/.test(userInfo.mail)) {
+      mailField.innerHTML = "メールアドレスを入力してください";
+      mailField.style.color = colors.errC;
+      submitFlag++;
     } else {
-      const mailField = document.getElementById("mailErrField");
       mailField.innerHTML = "メールアドレス";
       mailField.style.color = colors.gray1;
     }
 
-    if (!nameVal) {
-      const nameField = document.getElementById("nameErrField");
+    const nameField = document.getElementById("nameErrField");
+    if (!userInfo.name) {
       nameField.innerHTML = "名前が入力されていません";
       nameField.style.color = colors.errC;
       submitFlag++;
     } else {
-      const nameField = document.getElementById("nameErrField");
-      nameField.innerHTML = "メールアドレス";
+      nameField.innerHTML = "半角英数";
       nameField.style.color = colors.gray1;
     }
 
 
-    if (!passVal) {
-      const passField = document.getElementById("passErrField");
+    const passField = document.getElementById("passErrField");
+    if (!userInfo.pass1) {
       passField.innerHTML = "password欄が入力されていません";
       passField.style.color = colors.errC;
       submitFlag++;
-    } else {
-      const passField = document.getElementById("passErrField");
+    } else if (userInfo.pass1.length < 7) {
+      passField.innerHTML = "passwordは必ず8文字以上";
+      passField.style.color = colors.errC;
+    }
+    else {
       passField.innerHTML = "半角英数8文字以上";
       passField.style.color = colors.gray1;
     }
 
-    if (pass2Val !== passVal) {
-      const pass2Field = document.getElementById("pass2ErrField");
+    const pass2Field = document.getElementById("pass2ErrField");
+    if (!userInfo.pass2) {
+      pass2Field.innerHTML = "passwordが入力されていません";
+      pass2Field.style.color = colors.errC;
+      submitFlag++;
+    } else if (userInfo.pass2 !== userInfo.pass1) {
       pass2Field.innerHTML = "password1と同じ値を入力してください";
       pass2Field.style.color = colors.errC;
       submitFlag++;
-      console.log(passVal + "と" + pass2Val);
     } else {
-      const pass2Field = document.getElementById("pass2ErrField");
-      pass2Field.innerHTML = "半角英数8文字以上";
+      pass2Field.innerHTML = "password1と同じ値";
       pass2Field.style.color = colors.gray1;
     }
 
 
+
+
+
+
     // 全てクリアで送信処理---
     if (submitFlag === 0) {
-      const res = await axios.post(serv + "signUp", {
-        email: mailVal,
-        name: nameVal,
-        password: passVal
-      });
-      console.log("post結果", res);
+
+      // icon画像変更リクエスト
+      const formData = new FormData();
+      formData.append("file", file)
+      // console.log(userInfo);
+
+      // オブジェクトを行ごとに送るデータ追加
+      Object.keys(userInfo).forEach((key) => {
+        formData.append(key, userInfo[key]);
+      })
+
+      // アイコン送信
+      // console.log("変更アイコンは-------------", formData);
+      // iconChangeリクエストを投げる
+      const headers = { "content-type": "multipart/form-data" };
+      axios.post(
+        serv + "changeIcon",
+        formData,
+        { headers })
+        .then(res => {
+          // console.log(res)
+          if (res.data === "画像アップロード成功") {
+            alert("成功")
+            history.push("/profile" + userInfo.user_id);
+          }
+        })
+        .catch(console.err)
+
+
     }
-    console.log(submitFlag);
+    // console.log("送信フラグは", submitFlag);
   }
 
 
@@ -166,23 +294,38 @@ const AcountEditPage = () => {
   return (
     <div className={classes.contentWrap}>
       <div className={classes.signUpWrap}>
-        <Link to="/profile" className={classes.Links}>ホームへ戻る</Link>
+        <Link to={"/profile" + userId} className={classes.Links}>プロフィールに戻る</Link>
 
         <h2>Create Account</h2>
         <p>- アカウント編集 -</p>
 
-        <img src={icon02} alt="logo" className={classes.acountImg} />
 
+        <label htmlFor="iconFile" className={classes.iconLabel}>
+          <img src={icon} alt="logo" className={classes.acountImg} />
+          <SettingsIcon className={classes.settingIcon} />
+        </label>
+        <input
+          accept="image/png,image/jpeg"
+          id="iconFile"
+          className={classes.IconInput}
+          type="file"
+          onChange={changeFile}
+        />
+        <br />
 
-        <form className={classes.form}>
+        {/* <Button onClick={() => console.log(userInfo)}>チェックuserInfo</Button>
+        <Button variant="outlined" color="primary" onClick={() => console.log(file)}>check imageファイル</Button> */}
+
+        <div className={classes.form}>
           {/* mail */}
-          <div>
+          <div className={classes.TextFieldWrap}>
             <TextField
               autoFocus
               fullWidth
               required
               label="Mail"
               placeholder="kunio092@gmail.com"
+              value={userInfo.mail}
               variant="outlined"
               onChange={setMailval}
             />
@@ -190,12 +333,13 @@ const AcountEditPage = () => {
           </div>
 
           {/* name */}
-          <div>
+          <div className={classes.TextFieldWrap}>
             <TextField
               required
               fullWidth
               label="Name"
               placeholder="kuni_kuni092"
+              value={userInfo.name}
               variant="outlined"
               onChange={setNameval}
             />
@@ -203,7 +347,7 @@ const AcountEditPage = () => {
           </div>
 
           {/* password1 */}
-          <div>
+          <div className={classes.TextFieldWrap}>
             <TextField
               required
               fullWidth
@@ -216,8 +360,8 @@ const AcountEditPage = () => {
             <p id="passErrField" className={classes.errField}>半角英数8文字以上</p>
           </div>
 
-          {/* password */}
-          <div>
+          {/* password2 */}
+          <div className={classes.TextFieldWrap}>
             <TextField
               required
               fullWidth
@@ -230,6 +374,23 @@ const AcountEditPage = () => {
             <p id="pass2ErrField" className={classes.errField}>Password1と同じ値</p>
           </div>
 
+          <div className={classes.TextFieldWrap}>
+            <TextField
+              className={classes.profileText}
+              label="プロフィール文入力欄"
+              placeholder="ここから入力"
+              value={userInfo.profile}
+              variant="outlined"
+              multiline
+              rows="6"
+              maxLength="180"
+              inputProps={{ maxLength: 180 }}
+              onChange={setProfile}
+              onKeyUp={setProfileLength}
+            />
+            <p id="profileText" className={classes.errField}><span id="numberDisplay">{userInfo.profile.length}</span> / 180</p>
+          </div>
+
 
           <Button
             size="large"
@@ -240,11 +401,11 @@ const AcountEditPage = () => {
           >
             編集
           </Button>
-        </form>
+        </div>
 
 
       </div>
-    </div>
+    </div >
   );
 
 }

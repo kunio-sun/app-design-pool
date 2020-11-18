@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import colors from "../commonStyles/colors";
 import Head from "../components/header";
 import HeadAfterLogin from "../components/headerAfterLogin";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { serv } from "../serv"
 
 //テストがぞう
-import icon02 from "../images/userIcon/user02.jpg";
-import postImage from "../images/testImage/postImage.jpg";
+import dummyIcon from "../images/userIcon/user02.jpg";
+import postDummyImage from "../images/testImage/postImage.jpg";
 
 import Button from "@material-ui/core/Button";
 
 
 const useStyles = makeStyles((theme) => ({
   pageWrap: {
-    // marginTop: "120px",
+    marginTop: "180px",
     // backgroundColor: "orange",
     display: "flex",
     flexWrap: "wrap",
@@ -65,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
       height: "180px",
       objectFit: "cover",
       borderRadius: "50%",
+      boxShadow: "1px 1px 12px " + colors.gray3,
     },
     '& p': {
       color: colors.gray2,
@@ -108,8 +111,66 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ContentPage = () => {
-  // usestyle
+  const { imageName } = useParams();
+  const dummyContent = {
+    user_id: 1,
+    icon: postDummyImage,
+    name: "dummyName",
+    img: postDummyImage,
+    content: "dummycontent-dummycontent-dummycontent-dummycontent-dummycontent"
+  }
   const classes = useStyles();
+
+  const [contentInfo, setContentInfo] = useState([dummyContent]);
+  const [contentImage, setContentImage] = useState(postDummyImage);
+  const [icon, setIcon] = useState(dummyIcon);
+
+
+  useEffect(() => {
+    // console.log("前ページから送られてきた画像名は  " + imageName);
+    axios.get(serv + "content?seachImageName=" + imageName)
+      .then((res) => {
+        // console.log("sql取得Dataは", res.data);
+        setContentInfo(res.data);
+
+        //res.data IConの画像名を画像データに書き換える
+        getIconFile(res.data.icon);
+
+        //res.data postDummyImageの画像名を画像データに書き換える
+        getImageFile(res.data.img);
+      })
+      .catch(console.error);
+
+    const getIconFile = (iconName) => {
+      // console.log("とってくるアイコン名は", iconName);
+      axios.get(serv + "getIconFile?icon=" + iconName, { responseType: "blob" })
+        .then(res => {
+          const reader = new FileReader();
+          reader.readAsDataURL(res.data);
+          reader.onload = () => {
+            const imageDataUrl = reader.result;
+            setIcon(imageDataUrl);
+          }
+        })
+        .catch(console.error)
+    } // end getIconFile()
+
+    const getImageFile = (imgName) => {
+      // console.log(imgName + "fileをリクエスト");
+      axios.get(serv + "getImageFile?img=" + imgName, { responseType: "blob" })
+        .then((res) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(res.data);
+          reader.onload = () => {
+            const imageDataUrl = reader.result;
+            setContentImage(imageDataUrl);
+          }
+        })
+        .catch(console.error);
+    }// end getImageFile()
+
+  }, [imageName]);// end useEffect()
+
   return (
     <>
       <Head />
@@ -118,10 +179,11 @@ const ContentPage = () => {
         {/* 左側 */}
         <div className={classes.leftWrap}>
           <div className={classes.leftInner}>
-            <img src={icon02} alt="ユーザアイコン" />
+            <img src={icon} alt="ユーザアイコン" />
             <p>created by</p>
-            <h2>Kunio092</h2>
-            <Link to="/portfolio" className={classes.portfolioLink}>
+            <h2>{contentInfo.name}</h2>
+            {/* <Button color="secondary" onClick={() => console.log("現在のコンテンツ情報は", contentInfo)}>contentInfo表示</Button> */}
+            <Link to={"/portfolio" + contentInfo.user_id} className={classes.portfolioLink}>
               <Button variant="outlined" color="default">
                 作品集を見る
               </Button>
@@ -133,8 +195,8 @@ const ContentPage = () => {
         {/* 右側 */}
         <div className={classes.rightWrap}>
           <div className={classes.rightInner}>
-            <img src={postImage} alt="投稿画像" />
-            <p>知り合いのアイコン画像を作りました。後ろの背景は素材写真サイトのunsplashでダウンロードした物になります。元画像と背景画像の光の当たり方が合っていなかったため馴染ませるのに苦戦しました。こうやって完成した物を見ると、壁にもたれてる感を出したかったので影も入れたらもう少し馴染んでいたかもしれないです。</p>
+            <img src={contentImage} alt="投稿画像" />
+            <p>{contentInfo.content}</p>
           </div>
         </div>
       </div>

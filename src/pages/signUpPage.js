@@ -116,7 +116,7 @@ const SignUpPage = () => {
       submitFlag++;
     } else {
       const nameField = document.getElementById("nameErrField");
-      nameField.innerHTML = "メールアドレス";
+      nameField.innerHTML = "半角英数";
       nameField.style.color = colors.gray1;
     }
 
@@ -137,7 +137,12 @@ const SignUpPage = () => {
       passField.style.color = colors.gray1;
     }
 
-    if (pass2Val !== passVal) {
+    if (!pass2Val) {
+      const pass2Field = document.getElementById("pass2ErrField");
+      pass2Field.innerHTML = "passwordが入力されていません";
+      pass2Field.style.color = colors.errC;
+      submitFlag++;
+    } else if (pass2Val !== passVal) {
       const pass2Field = document.getElementById("pass2ErrField");
       pass2Field.innerHTML = "password1と同じ値を入力してください";
       pass2Field.style.color = colors.errC;
@@ -157,7 +162,7 @@ const SignUpPage = () => {
         name: nameVal,
         password: passVal
       });
-      console.log("post結果", res);
+      // console.log("post結果", res);
       if (res.data === "email重複") {
         alert("既に登録されているメールアドレスです");
       } else {
