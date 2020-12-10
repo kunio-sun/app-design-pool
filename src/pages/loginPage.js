@@ -3,6 +3,8 @@ import logoD from "../images/logo_D.png";
 import { Link } from "react-router-dom";
 import colors from "../commonStyles/colors"
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 // material ui
 import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -12,6 +14,8 @@ import Axios from 'axios';
 
 // server読み込み
 import { serv } from "../serv";
+import { signInAction } from '../reducks/users/actions';
+// import LoginStateCheck from '../components/loginStateCheck';
 
 // Usestyles
 const useStyles = makeStyles(() => ({
@@ -66,6 +70,10 @@ const useStyles = makeStyles(() => ({
 const LoginPage = () => {
   const history = useHistory();
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+
+  // LoginStateCheck();
 
   // useState フォーム入力情報保持---
   const [mailVal, setFunc] = useState("");
@@ -108,10 +116,18 @@ const LoginPage = () => {
         email: mailVal,
         pass: passVal
       });
-      // console.log("この値を送信", mailVal, passVal);
-      // console.log("post結果", res);
-      if (res.data) {
+
+      const userData = res.data[0];
+      if (userData) {
         alert("ログイン成功");
+        dispatch(signInAction({
+          uid: userData.user_id,
+          username: userData.name,
+          mail: userData.mail,
+          icon: userData.icon,
+          profile: userData.profile
+        }))
+
         history.push("/home");
       } else {
         alert("メールアドレス又はパスワードが間違っています");
@@ -174,6 +190,22 @@ const LoginPage = () => {
           >
             Login
         </Button>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() => {
+              dispatch(signInAction({
+                uid: "16",
+                username: "kunio092",
+                mail: "kunio092@gmail.com",
+                icon: "1.png",
+                profile: "テストログインした方のアカウントです"
+              }))
+              alert("テストユーザLoginStateを格納します")
+              history.push("/")
+
+            }}
+          >ダミーユーザログイン</Button>
         </form>
         <Link to="/signUp" className={classes.Links}>アカウント作成へ</Link>
 

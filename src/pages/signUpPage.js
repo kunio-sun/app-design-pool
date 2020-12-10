@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import logoD from "../images/logo_D.png";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { signInAction } from '../reducks/users/actions';
+import { useDispatch } from 'react-redux'
 
 // maeterialUI
 import { TextField } from "@material-ui/core";
@@ -69,6 +71,7 @@ const useStyles = makeStyles(() => ({
 const SignUpPage = () => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   // useState フォーム入力情報保持-----
   const [mailVal, setFunc] = useState("");
@@ -166,7 +169,17 @@ const SignUpPage = () => {
       if (res.data === "email重複") {
         alert("既に登録されているメールアドレスです");
       } else {
+        console.log(res.data);
         alert("アカウント作成に成功しました");
+
+        const userData = res.data;
+        dispatch(signInAction({
+          uid: userData.user_id,
+          username: userData.name,
+          mail: userData.mail,
+          icon: userData.icon,
+          profile: userData.profile
+        }))
         history.push("/home");
       }
     }

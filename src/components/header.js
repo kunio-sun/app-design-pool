@@ -20,7 +20,10 @@ import logo from "../images/logo_designpool_normal.png";
 import logoD from "../images/logo_D.png";
 //style color
 import colors from "../commonStyles/colors";
+import LoginStateCheck from '../components/loginStateCheck';
 
+import polingButton from "../images/poling_button.png";
+import profileButton from "../images/profile_button.png";
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -76,6 +79,11 @@ const useStyles = makeStyles(() => ({
 
   },
   header_buttons: {
+    display: "flex",
+    justifyContent: "center",
+    '& img': {
+      margin: '0 6px',
+    },
     '& Button': {
       margin: '0 6px',
     }
@@ -107,102 +115,192 @@ const useStyles = makeStyles(() => ({
     textDecoration: "none"
   }
 }));
-const Head = () => {
+const Head = (props) => {
+  // console.log("seachKEy", props.seachKey)
   const classes = useStyles();
   const history = useHistory();
 
+  const loginState = LoginStateCheck("headerから");
+
   // useState フォーム入力情報保持---
-  const [seachKey, setSeachKey] = useState("");
+  const [seachKey, setSeachKey] = useState(props.seachKey);
   const setKey = (event) => {
     setSeachKey(event.target.value);
   }
-  return (
-    <>
-      {/* パソコンサイズ */}
-      <MediaQuery query="(min-width:768px)">
-        <AppBar className={classes.header} >
-          <Toolbar className={classes.header_bar}>
-            <div className={classes.header_left}>
-              <Link to="/home">
-                <img src={logo} alt="ロゴ" className={classes.header_logo} />
-              </Link>
-              <Paper
-                className={classes.Input_Paper}
-                elevation={0}
-                component="form"
-              >
-                <InputBace
-                  placeholder="design , photo , logo etc"
-                  className={classes.InputBace}
-                  onChange={setKey}
-                />
-                <IconButton size="medium" /* type="submit" */ onClick={() => history.push("/home" + seachKey)}>
-                  <SeachIcon fontSize="small" />
-                </IconButton>
-              </Paper>
-            </div>
+  if (loginState.isSignedIn) {
+    return (
+      <>
+        {/* パソコンサイズ */}
+        <MediaQuery query="(min-width:768px)">
+          <AppBar className={classes.header} >
+            <Toolbar className={classes.header_bar}>
+              <div className={classes.header_left}>
+                <Link to="/home">
+                  <img src={logo} alt="ロゴ" className={classes.header_logo} />
+                </Link>
+                <Paper
+                  className={classes.Input_Paper}
+                  elevation={0}
+                  component="form"
+                >
+                  <InputBace
+                    placeholder="design , photo , logo etc"
+                    className={classes.InputBace}
+                    onChange={setKey}
+                  />
+                  <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
+                    <SeachIcon fontSize="small" />
+                  </IconButton>
+                </Paper>
+              </div>
 
-            <div className={classes.header_buttons}>
-              <Link to="/signUp" className={classes.Links}>
-                <Button variant="outlined">
-                  sign up
+              <div className={classes.header_buttons}>
+                <Link to="/pooling" className={classes.Links}>
+                  <img src={polingButton} alt="pooling button" />
+                </Link>
+                <Link to={"/profile" + loginState.uid} className={classes.Links}>
+                  <img src={profileButton} alt="プロフィールボタン" />
+                </Link>
+              </div>
+
+            </Toolbar>
+          </AppBar>
+
+        </MediaQuery>
+
+
+        {/* タブレットサイズ */}
+        <MediaQuery query="(max-width:767px)">
+          <AppBar className={classes.header} >
+            <Toolbar className={classes.header_bar}>
+              <div className={classes.header_left}>
+                <Link to="/home">
+                  <img src={logoD} alt="ロゴ" className={classes.header_logo} />
+                </Link>
+                <Paper
+                  className={classes.Input_PaperT}
+                  elevation={0}
+                  component="form"
+                >
+                  <InputBace
+                    placeholder="design , photo , logo etc"
+                    className={classes.InputBaceT}
+                    onChange={setKey}
+                  />
+                  <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
+                    <SeachIcon fontSize="small" />
+                  </IconButton>
+                </Paper>
+              </div>
+            </Toolbar>
+          </AppBar>
+
+          <nav className={classes.bottom_nav}>
+            <Link to={"/profile" + loginState.uid} className={classes.Links}>
+              <Button variant="outlined">
+                profile
+              </Button>
+            </Link>
+            <Link to="/pooling" className={classes.Links}>
+              <Button variant="outlined" color="primary" >
+                pooling
+              </Button>
+            </Link>
+          </nav>
+        </MediaQuery>
+      </>
+    )
+
+  } else {
+    return (
+      <>
+        {/* パソコンサイズ */}
+        <MediaQuery query="(min-width:768px)">
+          <AppBar className={classes.header} >
+            <Toolbar className={classes.header_bar}>
+              <div className={classes.header_left}>
+                <Link to="/home">
+                  <img src={logo} alt="ロゴ" className={classes.header_logo} />
+                </Link>
+                <Paper
+                  className={classes.Input_Paper}
+                  elevation={0}
+                  component="form"
+                >
+                  <InputBace
+                    placeholder="design , photo , logo etc"
+                    className={classes.InputBace}
+                    onChange={setKey}
+                  />
+                  <IconButton size="medium" /* type="submit" */ onClick={() => history.push("/home" + seachKey)}>
+                    <SeachIcon fontSize="small" />
+                  </IconButton>
+                </Paper>
+              </div>
+
+              <div className={classes.header_buttons}>
+                <Link to="/signUp" className={classes.Links}>
+                  <Button variant="outlined">
+                    sign up
+                    </Button>
+                </Link>
+                <Link to="/login" className={classes.Links}>
+                  <Button variant="outlined" color="primary" >
+                    login
+                    </Button>
+                </Link>
+              </div>
+
+            </Toolbar>
+          </AppBar>
+
+        </MediaQuery>
+
+
+        {/* タブレットサイズ */}
+        <MediaQuery query="(max-width:767px)">
+          <AppBar className={classes.header} >
+            <Toolbar className={classes.header_bar}>
+              <div className={classes.header_left}>
+                <Link to="/home">
+                  <img src={logoD} alt="ロゴ" className={classes.header_logo} />
+                </Link>
+                <Paper
+                  className={classes.Input_PaperT}
+                  elevation={0}
+                  component="form"
+                >
+                  <InputBace
+                    placeholder="design , photo , logo etc"
+                    className={classes.InputBaceT}
+                    onChange={setKey}
+                  />
+                  <IconButton size="medium" onClick={() => { history.push("/home" + seachKey) }}>
+                    <SeachIcon fontSize="small" />
+                  </IconButton>
+                </Paper>
+              </div>
+            </Toolbar>
+          </AppBar>
+
+          <nav className={classes.bottom_nav}>
+            <Link to="/signUp" className={classes.bottomLeftButton}>
+              <Button variant="outlined">
+                sign up
                 </Button>
-              </Link>
-              <Link to="/login" className={classes.Links}>
-                <Button variant="outlined" color="primary" >
-                  login
+            </Link>
+            <Link to="/login" className={classes.bottomRightButton}>
+              <Button variant="outlined" color="primary" >
+                login
                 </Button>
-              </Link>
-            </div>
+            </Link>
+          </nav>
 
-          </Toolbar>
-        </AppBar>
+        </MediaQuery>
+      </>
+    )
 
-      </MediaQuery>
-
-
-      {/* タブレットサイズ */}
-      <MediaQuery query="(max-width:767px)">
-        <AppBar className={classes.header} >
-          <Toolbar className={classes.header_bar}>
-            <div className={classes.header_left}>
-              <Link to="/home">
-                <img src={logoD} alt="ロゴ" className={classes.header_logo} />
-              </Link>
-              <Paper
-                className={classes.Input_PaperT}
-                elevation={0}
-                component="form"
-              >
-                <InputBace
-                  placeholder="design , photo , logo etc"
-                  className={classes.InputBaceT}
-                  onChange={setKey}
-                />
-                <IconButton size="medium" onClick={() => { history.push("/home" + seachKey) }}>
-                  <SeachIcon fontSize="small" />
-                </IconButton>
-              </Paper>
-            </div>
-          </Toolbar>
-        </AppBar>
-
-        <nav className={classes.bottom_nav}>
-          <Link to="/signUp" className={classes.bottomLeftButton}>
-            <Button variant="outlined">
-              sign up
-            </Button>
-          </Link>
-          <Link to="/login" className={classes.bottomRightButton}>
-            <Button variant="outlined" color="primary" >
-              login
-            </Button>
-          </Link>
-        </nav>
-
-      </MediaQuery>
-    </>
-  )
+  }
 }
 
 export default Head;

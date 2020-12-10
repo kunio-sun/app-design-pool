@@ -5,10 +5,10 @@ const initialState = {
   users: {
     isSignedIn: false,
     icon: "",
-    //mail: ""
+    mail: "",
     uid: "",
-    username: ""
-    //profile: ""
+    username: "",
+    profile: ""
   },
   // products: {
 

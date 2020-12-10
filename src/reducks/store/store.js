@@ -1,24 +1,25 @@
 import {
   createStore as reduxCreateStore,
   combineReducers,
-  applyMiddleware
+  /* applyMiddleware */
 } from "redux";
-import { connectRouter, routerMiddleware } from "connected-react-router";
-import thunk from 'redux-thunk';
+// import { connectRouter, routerMiddleware } from "connected-react-router";
+// import thunk from 'redux-thunk';
 
 import { UsersReducer } from "../users/reducers"
 
 
-export default function createStore(history) {
+export default function createStore(/* history */) {
   return reduxCreateStore(
     combineReducers({
-      router: connectRouter(history),
+      // router: connectRouter(history),
       users: UsersReducer
     }),
     // applyMiddlewareの中には必要なミドルウェアを好きなだけ入れれる
-    /* つける */applyMiddleware(
-      routerMiddleware(history),
-      thunk
-    )
+    /* つける = apply */
+    // applyMiddleware(
+    //   routerMiddleware(history),
+    //   thunk
+    // )
   )
 }

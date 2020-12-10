@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import colors from "../commonStyles/colors";
 import Head from "../components/header";
-import HeadAfterLogin from "../components/headerAfterLogin";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { serv } from "../serv"
@@ -174,7 +173,6 @@ const ContentPage = () => {
   return (
     <>
       <Head />
-      <HeadAfterLogin />
       <div className={classes.pageWrap}>
         {/* 左側 */}
         <div className={classes.leftWrap}>

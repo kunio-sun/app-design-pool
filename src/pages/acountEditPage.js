@@ -131,7 +131,7 @@ const AcountEditPage = () => {
   const changeFile = (event) => {
     const file = event.target.files[0];
     const previwIcon = URL.createObjectURL(file);
-    // console.log("送るファイルdata", file);
+    console.log("送るファイルdata", file);
     setFile(file);
     setIcon(previwIcon)
   }
@@ -191,7 +191,7 @@ const AcountEditPage = () => {
   }
 
 
-  // ログインボタンクリック時発火----------------
+  // 送信ボタンクリック時発火----------------
   const registSubmit = async () => {
     let submitFlag = 0;
 
@@ -258,13 +258,15 @@ const AcountEditPage = () => {
 
       // icon画像変更リクエスト
       const formData = new FormData();
-      formData.append("file", file)
+      formData.append("file", file, userInfo.user_id)
       // console.log(userInfo);
 
       // オブジェクトを行ごとに送るデータ追加
       Object.keys(userInfo).forEach((key) => {
         formData.append(key, userInfo[key]);
       })
+
+      console.log(formData, "----------------------------")
 
       // アイコン送信
       // console.log("変更アイコンは-------------", formData);
