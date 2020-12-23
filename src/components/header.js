@@ -148,7 +148,9 @@ const Head = (props) => {
   }, [loginState])
 
   // useState フォーム入力情報保持---
+
   const [seachKey, setSeachKey] = useState(props.seachKey);
+
   const setKey = (event) => {
     setSeachKey(event.target.value);
   }
@@ -183,6 +185,7 @@ const Head = (props) => {
                   <InputBace
                     placeholder="design , photo , logo etc"
                     className={classes.InputBace}
+                    value={seachKey}
                     onChange={setKey}
                     onKeyPress={seachPostEnter}
                     autoFocus={true}
