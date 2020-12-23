@@ -4,6 +4,7 @@ import colors from "../commonStyles/colors";
 import Head from "../components/header";
 import HeadAfterLogin from "../components/headerAfterLogin";
 
+import LoginStateCheck from "../components/loginStateCheck"
 
 const useStyles = makeStyles((theme) => ({
   pageWrap: {
@@ -32,9 +33,11 @@ const useStyles = makeStyles((theme) => ({
 const ContentPage = () => {
   // usestyle
   const classes = useStyles();
+
+  const loginState = LoginStateCheck("テンプレートページからアクセス")
   return (
     <>
-      <Head />
+      <Head loginState={loginState} />
       <HeadAfterLogin />
       <div className={classes.pageWrap}>
         <div className={classes.test}>

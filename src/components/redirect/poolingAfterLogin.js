@@ -184,9 +184,8 @@ const PoolingAfterLogin = () => {
 
 
   var initialTagArray = [
-    // "kunio092",
-    // "portfolio",
-    "loginStateTestPost"
+    loginState.name,
+    "portfolio"
   ]
   const [tags, setTags] = useState(initialTagArray);
 
@@ -313,7 +312,7 @@ const PoolingAfterLogin = () => {
 
   return (
     <>
-      <Head />
+      <Head loginState={loginState} />
       <div className={classes.pageWrap}>
         <div>
           {/* <Button variant="contained" onClick={() => console.log(tags)}>今のtags値</Button> */}

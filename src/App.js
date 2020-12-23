@@ -22,8 +22,8 @@ const App = () => {
           <Route exact path="/login" component={LoginPage}></Route>
           <Route exact path="/content:imageName" component={ContentPage}></Route>
           <Route exact path="/portfolio:userId" component={PortfolioPage}></Route>
-          <Route exact path="/profile:userId" component={ProfilePage}></Route>
-          <Route exact path="/acountEdit:userId" component={AcountEditPage}></Route>
+          <Route exact path="/profile" component={ProfilePage}></Route>
+          <Route exact path="/acountEdit" component={AcountEditPage}></Route>
           <Route exact path="/pooling" component={PoolingPage}></Route>
         </Switch>
       </Router>

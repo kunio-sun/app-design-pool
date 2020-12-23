@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Masonry from "react-masonry-css";
 import colors from "../commonStyles/colors"
-import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { serv } from "../serv"
 
@@ -37,7 +36,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const ImageOnlyPostList = (props) => {
+const PostListProfile = (props) => {
   const classes = useStyles();
   const [images, setImages] = useState([]);
   const [iterateLastImage, setIterateLastImage] = useState("");
@@ -45,7 +44,7 @@ const ImageOnlyPostList = (props) => {
 
 
   // app.jsのroute パス :keyNameを指定(props)
-  const { userId } = useParams();
+  const userId = props.loginState.uid;
   useEffect(() => {
     // imageViewの初期化
     // console.log("検索するuserIdは" + userId)
@@ -140,9 +139,9 @@ const ImageOnlyPostList = (props) => {
         {images.map((row, index) => (
           <div className={classes.event_card} key={index}>
 
-            <Link to={"/content" + row.imageName}>
-              <img src={row.imageData} alt={"画像" + row.imageName} className={classes.postImage} />
-            </Link>
+            {/* <Link to={"/content" + row.imageName}> */}
+            <img src={row.imageData} alt={"画像" + row.imageName} className={classes.postImage} />
+            {/* </Link> */}
           </div>
         ))}
       </Masonry>
@@ -159,4 +158,4 @@ const ImageOnlyPostList = (props) => {
   );
 }
 
-export default ImageOnlyPostList;
+export default PostListProfile;

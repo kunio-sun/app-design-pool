@@ -1,5 +1,4 @@
 import React from "react";
-import Head from "../components/header";
 import { Redirect } from "react-router-dom";
 
 
@@ -23,7 +22,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Head />
+
       {
         loginState.isSignedIn ?
           <ProfileAfterLogin /> : <Redirect to="/" />

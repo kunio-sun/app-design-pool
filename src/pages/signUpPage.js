@@ -90,7 +90,11 @@ const SignUpPage = () => {
   const setPass2val = (event) => {
     setPass2(event.target.value);
   }
-
+  const enterSubmit = (e) => {
+    if (e.key === 'Enter') {
+      registSubmit();
+    }
+  }
 
   // ログインボタンクリック時発火----------------
   const registSubmit = async () => {
@@ -212,6 +216,7 @@ const SignUpPage = () => {
               placeholder="kunio092@gmail.com"
               variant="outlined"
               onChange={setMailval}
+              onKeyPress={enterSubmit}
             />
             <p id="mailErrField" className={classes.errField}>メールアドレス</p>
           </div>
@@ -225,6 +230,7 @@ const SignUpPage = () => {
               placeholder="kuni_kuni092"
               variant="outlined"
               onChange={setNameval}
+              onKeyPress={enterSubmit}
             />
             <p id="nameErrField" className={classes.errField}>半角英数</p>
           </div>
@@ -239,6 +245,7 @@ const SignUpPage = () => {
               placeholder="**********"
               variant="outlined"
               onChange={setPassval}
+              onKeyPress={enterSubmit}
             />
             <p id="passErrField" className={classes.errField}>半角英数8文字以上</p>
           </div>
@@ -253,6 +260,7 @@ const SignUpPage = () => {
               placeholder="**********"
               variant="outlined"
               onChange={setPass2val}
+              onKeyPress={enterSubmit}
             />
             <p id="pass2ErrField" className={classes.errField}>Password1と同じ値</p>
           </div>

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { useHistory } from "react-router-dom";
-
+import axios from "axios";
+import { serv } from "../serv"
 // react responsive
 import MediaQuery from "react-responsive";
 
@@ -20,7 +21,6 @@ import logo from "../images/logo_designpool_normal.png";
 import logoD from "../images/logo_D.png";
 //style color
 import colors from "../commonStyles/colors";
-import LoginStateCheck from '../components/loginStateCheck';
 
 import polingButton from "../images/poling_button.png";
 import profileButton from "../images/profile_button.png";
@@ -76,7 +76,6 @@ const useStyles = makeStyles(() => ({
   InputBaceT: {
     padding: '0 0 0 20px',
     width: '100%'
-
   },
   header_buttons: {
     display: "flex",
@@ -108,6 +107,12 @@ const useStyles = makeStyles(() => ({
   Links: {
     textDecoration: "none"
   },
+  icon: {
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+    objectFit: "cover",
+  },
   bottomLeftButton: {
     textDecoration: "none",
   },
@@ -120,12 +125,44 @@ const Head = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const loginState = LoginStateCheck("headerから");
+  const [icon, setIcon] = useState(profileButton);
+  // loginstate受け取り
+  const loginState = props.loginState;
+
+  useEffect(() => {
+    if (loginState.isSignedIn === false) return;
+    console.log(loginState.icon)
+    axios.get(serv + "getIconFile?icon=" + loginState.icon, { responseType: "blob" })
+      .then(res => {
+        const reader = new FileReader();
+        reader.readAsDataURL(res.data);
+        reader.onload = () => {
+          const imageDataUrl = reader.result;
+          setIcon(imageDataUrl);
+        }
+      })
+      .catch(console.error)
+    return () => {
+      // unmount
+    }
+  }, [loginState])
 
   // useState フォーム入力情報保持---
   const [seachKey, setSeachKey] = useState(props.seachKey);
   const setKey = (event) => {
     setSeachKey(event.target.value);
+  }
+
+  const seachPost = () => {
+    history.push("/home" + seachKey);
+  }
+  const seachPostEnter = (e) => {
+
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      history.push("/home" + seachKey);
+      // alert("press enter")
+    }
   }
   if (loginState.isSignedIn) {
     return (
@@ -147,8 +184,10 @@ const Head = (props) => {
                     placeholder="design , photo , logo etc"
                     className={classes.InputBace}
                     onChange={setKey}
+                    onKeyPress={seachPostEnter}
+                    autoFocus={true}
                   />
-                  <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
+                  <IconButton size="medium" onClick={seachPost}>
                     <SeachIcon fontSize="small" />
                   </IconButton>
                 </Paper>
@@ -158,8 +197,8 @@ const Head = (props) => {
                 <Link to="/pooling" className={classes.Links}>
                   <img src={polingButton} alt="pooling button" />
                 </Link>
-                <Link to={"/profile" + loginState.uid} className={classes.Links}>
-                  <img src={profileButton} alt="プロフィールボタン" />
+                <Link to={"/profile"} className={classes.Links}>
+                  <img className={classes.icon} src={icon} alt="プロフィールボタン" />
                 </Link>
               </div>
 
@@ -186,8 +225,10 @@ const Head = (props) => {
                     placeholder="design , photo , logo etc"
                     className={classes.InputBaceT}
                     onChange={setKey}
+                    onKeyPress={seachPostEnter}
+                    autoFocus={true}
                   />
-                  <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
+                  <IconButton size="medium" onClick={seachPost}>
                     <SeachIcon fontSize="small" />
                   </IconButton>
                 </Paper>
@@ -196,7 +237,7 @@ const Head = (props) => {
           </AppBar>
 
           <nav className={classes.bottom_nav}>
-            <Link to={"/profile" + loginState.uid} className={classes.Links}>
+            <Link to={"/profile"} className={classes.Links}>
               <Button variant="outlined">
                 profile
               </Button>
@@ -231,8 +272,10 @@ const Head = (props) => {
                     placeholder="design , photo , logo etc"
                     className={classes.InputBace}
                     onChange={setKey}
+                    onKeyPress={seachPostEnter}
+                    autoFocus={true}
                   />
-                  <IconButton size="medium" /* type="submit" */ onClick={() => history.push("/home" + seachKey)}>
+                  <IconButton size="medium" /* type="submit" */ onClick={seachPost}>
                     <SeachIcon fontSize="small" />
                   </IconButton>
                 </Paper>
@@ -274,8 +317,10 @@ const Head = (props) => {
                     placeholder="design , photo , logo etc"
                     className={classes.InputBaceT}
                     onChange={setKey}
+                    onKeyPress={seachPostEnter}
+                    autoFocus={true}
                   />
-                  <IconButton size="medium" onClick={() => { history.push("/home" + seachKey) }}>
+                  <IconButton size="medium" onClick={seachPost}>
                     <SeachIcon fontSize="small" />
                   </IconButton>
                 </Paper>

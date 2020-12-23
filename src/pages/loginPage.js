@@ -76,13 +76,20 @@ const LoginPage = () => {
   // LoginStateCheck();
 
   // useState フォーム入力情報保持---
-  const [mailVal, setFunc] = useState("");
+  const [mailVal, setFunc] = useState("stateChecker@gmail.com");
   const setMailval = (event) => {
     setFunc(event.target.value);
   }
-  const [passVal, setPass] = useState("");
+  const [passVal, setPass] = useState("kuni4649");
   const setPassval = (event) => {
     setPass(event.target.value);
+  }
+
+  const enterSubmit = (e) => {
+    if (e.key === 'Enter') {
+      console.log("enterキーが押されました")
+      loginSubmit();
+    }
   }
 
   // ログインボタンクリック時発火
@@ -120,9 +127,19 @@ const LoginPage = () => {
       const userData = res.data[0];
       if (userData) {
         alert("ログイン成功");
+        //localstrageに保存
+        localStorage.setItem("users", JSON.stringify({
+          isSignedIn: true,
+          icon: userData.icon,
+          uid: userData.user_id,
+          name: userData.name,
+          profile: userData.profile,
+          mail: userData.mail
+        }))
+        // reduxStateに保存
         dispatch(signInAction({
           uid: userData.user_id,
-          username: userData.name,
+          name: userData.name,
           mail: userData.mail,
           icon: userData.icon,
           profile: userData.profile
@@ -160,6 +177,7 @@ const LoginPage = () => {
               // value="kunio092@gmail.com"
               variant="outlined"
               onChange={setMailval}
+              onKeyPress={enterSubmit}
             />
             <p id="mailErrField" className={classes.errField}>メールアドレス</p>
           </div>
@@ -176,6 +194,7 @@ const LoginPage = () => {
               variant="outlined"
               // value="kuni4649"
               onChange={setPassval}
+              onKeyPress={enterSubmit}
             />
             <p id="passErrField" className={classes.errField}>半角英数8文字以上</p>
           </div>
@@ -190,7 +209,7 @@ const LoginPage = () => {
           >
             Login
         </Button>
-          <Button
+          {/* <Button
             color="secondary"
             variant="outlined"
             onClick={() => {
@@ -201,11 +220,19 @@ const LoginPage = () => {
                 icon: "1.png",
                 profile: "テストログインした方のアカウントです"
               }))
+              // localstrageへ格納
+              localStorage.setItem("users", JSON.stringify({
+                uid: "16",
+                username: "kunio092",
+                mail: "kunio092@gmail.com",
+                icon: "1.png",
+                profile: "テストログインした方のアカウントです"
+              }))
               alert("テストユーザLoginStateを格納します")
               history.push("/")
 
             }}
-          >ダミーユーザログイン</Button>
+          >ダミーユーザログイン</Button> */}
         </form>
         <Link to="/signUp" className={classes.Links}>アカウント作成へ</Link>
 

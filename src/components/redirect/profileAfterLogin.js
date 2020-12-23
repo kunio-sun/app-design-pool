@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux"
 import Axios from "axios";
 import { serv } from "../../serv";
 
-import PostListUserDetail from "../../components/PostListUserDetail";
+import PostListProfile from "../../components/PostListProfile";
 import { signOutAction } from "../../reducks/users/actions"
 
 import loginStateCheck from "../../components/loginStateCheck"
@@ -16,6 +16,7 @@ import loginStateCheck from "../../components/loginStateCheck"
 
 //テスト画像
 import dummyIcon from "../../images/iconLoading.png";
+import Head from "../header";
 
 
 
@@ -152,10 +153,13 @@ const ProfileAfterLogin = () => {
         })
         .catch(console.error)
     } // end getIconFile()
-  }, [userId])
+  }, [userId, loginState])
 
   const Logout = () => {
     console.log("logout")
+    // localstrageから状態消去
+    localStorage.removeItem("users")
+
     dispatch(signOutAction());
     history.push("/");
   }
@@ -163,30 +167,33 @@ const ProfileAfterLogin = () => {
 
   return (
 
-    <div className={classes.pageWrap}>
-      <Button onClick={Logout} className={classes.logout}>ログアウト</Button>
-      <div className={classes.userwrap}>
-        <img src={icon} alt="ユーザーアイコン" />
-        <h2>{userInfo.name}</h2>
-        <p className={classes.userMail}>{userInfo.mail}</p>
+    <>
+      <Head loginState={loginState} />
+      <div className={classes.pageWrap}>
+        <Button onClick={Logout} className={classes.logout}>ログアウト</Button>
+        <div className={classes.userwrap}>
+          <img src={icon} alt="ユーザーアイコン" />
+          <h2>{userInfo.name}</h2>
+          <p className={classes.userMail}>{userInfo.mail}</p>
 
-        <Link to={"/acountEdit" + userId} className={classes.profileButton}>
-          <Button variant="outlined" color="default"
-            endIcon={<Person />}>
-            プロフィール編集
-      </Button>
-        </Link>
-        <p className={classes.userText}>{userInfo.profile}</p>
+          <Link to={"/acountEdit"} className={classes.profileButton}>
+            <Button variant="outlined" color="default"
+              endIcon={<Person />}>
+              プロフィール編集
+          </Button>
+          </Link>
+          <p className={classes.userText}>{userInfo.profile}</p>
+        </div>
+
+        <div className={classes.poolingWrap}>
+          <Link to="/pooling" className={classes.poolingButton}>
+            <Button variant="contained">PooLing!!</Button>
+          </Link>
+        </div>
+
+        <PostListProfile loginState={loginState} />
       </div>
-
-      <div className={classes.poolingWrap}>
-        <Link to="/pooling" className={classes.poolingButton}>
-          <Button variant="contained">PooLing!!</Button>
-        </Link>
-      </div>
-
-      <PostListUserDetail />
-    </div>
+    </>
   )
 }
 

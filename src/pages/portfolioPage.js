@@ -10,8 +10,9 @@ import PostListUserDetail from "../components/PostListUserDetail"
 
 import { serv } from "../serv";
 //テスト画像
-import dummyIcon from "../images/userIcon/user02.jpg";
+import dummyIcon from "../images/iconLoading.png";
 import Axios from "axios";
+import LoginStateCheck from "../components/loginStateCheck";
 
 const useStyles = makeStyles((theme) => ({
   pageWrap: {
@@ -50,9 +51,11 @@ const useStyles = makeStyles((theme) => ({
     color: colors.gray2
   },
   userText: {
+    display: "inline-block",
     textAlign: "left",
     fontSize: "14px",
-    marginBottom: "32px"
+    marginBottom: "32px",
+
   },
   test: {
     [theme.breakpoints.down("sm")]: {
@@ -76,6 +79,9 @@ const useStyles = makeStyles((theme) => ({
 const PortfolioPage = () => {
   const { userId } = useParams();
   const classes = useStyles();
+
+
+
   const initializeUserInfo = {
     user_id: 1,
     icon: "InitializeIcon.png",
@@ -85,6 +91,8 @@ const PortfolioPage = () => {
   }
   const [userInfo, setUserInfo] = useState(initializeUserInfo);
   const [icon, setIcon] = useState(dummyIcon);
+
+  const loginState = LoginStateCheck("portfolioPageからアクセス")
 
 
 
@@ -117,7 +125,7 @@ const PortfolioPage = () => {
 
   return (
     <>
-      <Head />
+      <Head loginState={loginState} />
       <div className={classes.pageWrap}>
         <div className={classes.userwrap}>
           <img src={icon} alt="ユーザーアイコン" />

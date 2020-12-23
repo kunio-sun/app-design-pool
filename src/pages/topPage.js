@@ -14,7 +14,7 @@ import ImageOnlyPostList from "../components/imageOnlyPostList";
 
 // import { useDispatch } from "react-redux";
 // import { signInAction } from '../reducks/users/actions';
-// import LoginStateCheck from '../components/loginStateCheck';
+import LoginStateCheck from '../components/loginStateCheck';
 
 const useStyles = makeStyles(() => ({
   page_wrap: {
@@ -25,6 +25,7 @@ const useStyles = makeStyles(() => ({
 
 
 const TopPage = () => {
+  const loginState = LoginStateCheck("topPageから")
 
   // react redux専用のhook
   // 必ずuseDispatch()はdispatch定数に代入
@@ -51,7 +52,7 @@ const TopPage = () => {
         username: "kunio"
       }))}>テストサインインだよーーーーーーーーーーーーーーーー</button> */}
       <ImageOnlyPostList />
-      <Head seachKey={seachKey} />
+      <Head seachKey={seachKey} loginState={loginState} />
     </div >
   );
 }

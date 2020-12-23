@@ -7,11 +7,13 @@ import axios from "axios";
 import { serv } from "../serv"
 
 //テストがぞう
-import dummyIcon from "../images/userIcon/user02.jpg";
+import dummyIcon from "../images/iconLoading.png";
+
 import postDummyImage from "../images/testImage/postImage.jpg";
 
 import Button from "@material-ui/core/Button";
 
+import LoginStateCheck from "../components/loginStateCheck"
 
 const useStyles = makeStyles((theme) => ({
   pageWrap: {
@@ -120,6 +122,8 @@ const ContentPage = () => {
   }
   const classes = useStyles();
 
+  const loginState = LoginStateCheck("コンテンツページから")
+
   const [contentInfo, setContentInfo] = useState([dummyContent]);
   const [contentImage, setContentImage] = useState(postDummyImage);
   const [icon, setIcon] = useState(dummyIcon);
@@ -172,7 +176,8 @@ const ContentPage = () => {
 
   return (
     <>
-      <Head />
+
+      <Head loginState={loginState} />
       <div className={classes.pageWrap}>
         {/* 左側 */}
         <div className={classes.leftWrap}>
