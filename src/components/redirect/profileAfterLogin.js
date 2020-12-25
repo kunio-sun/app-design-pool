@@ -131,7 +131,6 @@ const ProfileAfterLogin = () => {
 
   useEffect(() => {
 
-    console.log("userIdは" + userId);
     Axios.get(serv + "getUserInfo?userId=" + userId)
       .then(res => {
         // console.log("上のuserInfo", res.data);
@@ -180,7 +179,7 @@ const ProfileAfterLogin = () => {
             <Button variant="outlined" color="default"
               endIcon={<Person />}>
               プロフィール編集
-          </Button>
+            </Button>
           </Link>
           <p className={classes.userText}>{userInfo.profile}</p>
         </div>

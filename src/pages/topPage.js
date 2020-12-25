@@ -45,7 +45,7 @@ const TopPage = () => {
   const { seachKey } = useParams();
 
 
-  console.log(seachKey)
+  // console.log(seachKey)
   return (
     <div className={classes.page_wrap}>
       {/* <button onClick={() => dispatch(signInAction({

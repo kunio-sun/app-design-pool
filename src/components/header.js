@@ -131,7 +131,7 @@ const Head = (props) => {
 
   useEffect(() => {
     if (loginState.isSignedIn === false) return;
-    console.log(loginState.icon)
+    // console.log(loginState.icon)
     axios.get(serv + "getIconFile?icon=" + loginState.icon, { responseType: "blob" })
       .then(res => {
         const reader = new FileReader();

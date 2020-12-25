@@ -76,7 +76,7 @@ const LoginPage = () => {
   // LoginStateCheck();
 
   // useState フォーム入力情報保持---
-  const [mailVal, setFunc] = useState("stateChecker@gmail.com");
+  const [mailVal, setFunc] = useState("changeMan@gmail.com");
   const setMailval = (event) => {
     setFunc(event.target.value);
   }

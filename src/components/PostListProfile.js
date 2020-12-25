@@ -96,7 +96,7 @@ const PostListProfile = (props) => {
         });
       })
       .catch(console.error);
-  }
+  }//end getImageNext()
 
   const getImageFile = (imgName) => {
     // console.log(imgName + "fileをリクエスト");
@@ -112,7 +112,24 @@ const PostListProfile = (props) => {
         }
       })
       .catch(console.error);
+  }// end getImageFile()
+
+  const postDeletet = (e) => {
+    const name = e.currentTarget.getAttribute('data-name');
+    const index = e.currentTarget.getAttribute('data-key')
+    axios.post(serv + "postDelete", { name: name })
+      .then((res) => {
+        console.log(res)
+        if (res.data === "ok") {
+          alert("消去");
+          const change = images;
+          change.splice(index, 1);
+          setImages([...change]);
+        }
+      })
+      .catch(console.err)
   }
+
 
 
 
@@ -137,11 +154,9 @@ const PostListProfile = (props) => {
       >
 
         {images.map((row, index) => (
-          <div className={classes.event_card} key={index}>
-
-            {/* <Link to={"/content" + row.imageName}> */}
+          <div className={classes.event_card} key={row.imageName}>
+            <button onClick={postDeletet} data-name={row.imageName} data-key={index}>delete</button>
             <img src={row.imageData} alt={"画像" + row.imageName} className={classes.postImage} />
-            {/* </Link> */}
           </div>
         ))}
       </Masonry>
@@ -153,7 +168,6 @@ const PostListProfile = (props) => {
         onClick={() => getImageNext()}>
         さらに表示</Button>
 
-      <h1>これは、ユーザ投稿詳細用のコンポーネントです</h1>
     </>
   );
 }
