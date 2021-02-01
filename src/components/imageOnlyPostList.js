@@ -22,18 +22,20 @@ const useStyles = makeStyles(() => ({
   event_card: {
     position: "relative",
     marginBottom: "16px",
-    // backgroundColor: "orange",
-    '& img': {
-      width: "100%",
-      height: "auto",
-      border: "0.1px solid" + colors.gray3,
-      boxShadow: "1px 1px 8px " + colors.gray3,
-    },
+  },
+  postImage: {
+    width: "100%",
+    height: "auto",
+    border: "0.1px solid" + colors.gray3,
+    boxShadow: "1px 1px 8px " + colors.gray3,
+    transition: "opacity 0.3s",
+    '&:hover': {
+      opacity: "0.7"
+    }
   },
   morePreviewBtn: {
     marginTop: "40px",
     width: "100%",
-
   }
 }));
 
@@ -44,6 +46,8 @@ const ImageOnlyPostList = () => {
 
   // app.jsのroute パス :keyNameを指定(props)
   const { seachKey } = useParams();
+  // 画像取得が0かあるかのbool
+  let hasResponseImage;
 
   useEffect(() => {
     // imageViewの初期化
@@ -86,6 +90,7 @@ const ImageOnlyPostList = () => {
         if (res.data.length === 0) {
           alert("現在このキーで取得できる画像はここまでとなります他の検索キーで検索してください");
         }
+
         res.data.forEach((obj, index) => {
           // console.log(obj.img);
           getImageFile(obj.img);
@@ -119,6 +124,7 @@ const ImageOnlyPostList = () => {
 
 
 
+
   // 1行に表示するカラム数
   const breakpointColumnsObj = {
     default: 3,
@@ -132,13 +138,13 @@ const ImageOnlyPostList = () => {
       {/* <Button variant="contained" color="secondary" onClick={() => console.log(iterateLastImage)}>取得最後の画像</Button> */}
       {/* <Button variant="contained" color="default" onClick={() => console.log(images)}>images配列取得</Button> */}
 
+      { images.length === 0 && <div>キーワード「{seachKey}」で取得できる画像はありません</div>}
 
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className={classes.my_masonry_grid}
         columnClassName={classes.my_masonry_grid_column}
       >
-
         {images.map((row, index) => (
           <div className={classes.event_card} key={index}>
 
@@ -148,13 +154,18 @@ const ImageOnlyPostList = () => {
           </div>
         ))}
       </Masonry>
-      <Button
-        className={classes.morePreviewBtn}
-        variant="outlined"
-        color="primary"
-        size="large"
-        onClick={() => getImageNext()}>
-        さらに表示</Button>
+
+
+      {
+        images.length > 0 &&
+        <Button
+          className={classes.morePreviewBtn}
+          variant="outlined"
+          color="primary"
+          size="large"
+          onClick={() => getImageNext()}>
+          さらに表示</Button>
+      }
 
     </>
   );

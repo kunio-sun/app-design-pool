@@ -22,7 +22,6 @@ const PoolingPage = () => {
 
   return (
     <>
-      <Head loginState={loginState} />
       {
         loginState.isSignedIn ?
           <PoolingAfterLogin /> : <Redirect to="/" />

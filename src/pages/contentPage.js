@@ -188,7 +188,7 @@ const ContentPage = () => {
             {/* <Button color="secondary" onClick={() => console.log("現在のコンテンツ情報は", contentInfo)}>contentInfo表示</Button> */}
             <Link to={"/portfolio" + contentInfo.user_id} className={classes.portfolioLink}>
               <Button variant="outlined" color="default">
-                作品集を見る
+                {contentInfo.name}の作品集を見る
               </Button>
             </Link>
 

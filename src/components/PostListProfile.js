@@ -6,6 +6,7 @@ import axios from "axios";
 import { serv } from "../serv"
 
 import { Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete"
 
 
 const useStyles = makeStyles(() => ({
@@ -21,18 +22,27 @@ const useStyles = makeStyles(() => ({
   event_card: {
     position: "relative",
     marginBottom: "16px",
-    // backgroundColor: "orange",
+    backgroundColor: "orange",
+    '& button': {
+      position: "absolute",
+      left: "0",
+      top: "0",
+      opacity: "0.3",
+    },
     '& img': {
+      verticalAlign: "top",
       width: "100%",
       height: "auto",
       border: "0.1px solid" + colors.gray3,
-      boxShadow: "1px 1px 8px " + colors.gray3,
+      boxShadow: "1px 1px 8px " + colors.gray3
     },
   },
   morePreviewBtn: {
     marginTop: "40px",
     width: "100%",
-
+  },
+  postNoneMessage: {
+    textAlign: "center"
   }
 }));
 
@@ -82,7 +92,7 @@ const PostListProfile = (props) => {
       .then((res) => {
         // console.log("reaponseDataは", res.data);
         if (res.data.length === 0) {
-          alert("現在このキーで取得できる画像はここまでとなります他の検索キーで検索してください");
+          alert("現在あなたの投稿はここまでです！さらに投稿しましょう！");
         }
         res.data.forEach((obj, index) => {
           // console.log(obj.img);
@@ -147,6 +157,8 @@ const PostListProfile = (props) => {
       {/* <Button variant="contained" color="secondary" onClick={() => console.log(iterateLastImage)}>取得最後の画像</Button> */}
       {/* <Button variant="contained" color="default" onClick={() => console.log(images)}>images配列取得</Button> */}
 
+      {images.length === 0 && <div className={classes.postNoneMessage}>投稿がないようです、早速投稿しましょう!!!</div>}
+
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className={classes.my_masonry_grid}
@@ -155,18 +167,30 @@ const PostListProfile = (props) => {
 
         {images.map((row, index) => (
           <div className={classes.event_card} key={row.imageName}>
-            <button onClick={postDeletet} data-name={row.imageName} data-key={index}>delete</button>
+            <Button
+              onClick={postDeletet}
+              data-name={row.imageName}
+              data-key={index}
+              variant="contained"
+              color="default"
+              size="small"
+            >
+              <DeleteIcon fontSize="small" />
+            </Button>
             <img src={row.imageData} alt={"画像" + row.imageName} className={classes.postImage} />
           </div>
         ))}
       </Masonry>
-      <Button
-        className={classes.morePreviewBtn}
-        variant="outlined"
-        color="primary"
-        size="large"
-        onClick={() => getImageNext()}>
-        さらに表示</Button>
+      {
+        images.length > 0 &&
+        <Button
+          className={classes.morePreviewBtn}
+          variant="outlined"
+          color="primary"
+          size="large"
+          onClick={() => getImageNext()}>
+          さらに表示</Button>
+      }
 
     </>
   );

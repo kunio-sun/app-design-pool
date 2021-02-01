@@ -112,6 +112,10 @@ const useStyles = makeStyles(() => ({
     height: "60px",
     borderRadius: "50%",
     objectFit: "cover",
+    transition: 'opacity .3s',
+    '&:hover': {
+      opacity: '0.7'
+    }
   },
   bottomLeftButton: {
     textDecoration: "none",
@@ -121,9 +125,10 @@ const useStyles = makeStyles(() => ({
   }
 }));
 const Head = (props) => {
-  // console.log("seachKEy", props.seachKey)
+
   const classes = useStyles();
   const history = useHistory();
+
 
   const [icon, setIcon] = useState(profileButton);
   // loginstate受け取り
@@ -159,7 +164,6 @@ const Head = (props) => {
     history.push("/home" + seachKey);
   }
   const seachPostEnter = (e) => {
-
     if (e.key === 'Enter') {
       e.preventDefault();
       history.push("/home" + seachKey);
@@ -174,9 +178,9 @@ const Head = (props) => {
           <AppBar className={classes.header} >
             <Toolbar className={classes.header_bar}>
               <div className={classes.header_left}>
-                <Link to="/home">
+                <div onClick={seachPost}>
                   <img src={logo} alt="ロゴ" className={classes.header_logo} />
-                </Link>
+                </div>
                 <Paper
                   className={classes.Input_Paper}
                   elevation={0}
@@ -198,7 +202,7 @@ const Head = (props) => {
 
               <div className={classes.header_buttons}>
                 <Link to="/pooling" className={classes.Links}>
-                  <img src={polingButton} alt="pooling button" />
+                  <img className={classes.icon} src={polingButton} alt="pooling button" />
                 </Link>
                 <Link to={"/profile"} className={classes.Links}>
                   <img className={classes.icon} src={icon} alt="プロフィールボタン" />
@@ -216,9 +220,9 @@ const Head = (props) => {
           <AppBar className={classes.header} >
             <Toolbar className={classes.header_bar}>
               <div className={classes.header_left}>
-                <Link to="/home">
+                <div onClick={seachPost}>
                   <img src={logoD} alt="ロゴ" className={classes.header_logo} />
-                </Link>
+                </div>
                 <Paper
                   className={classes.Input_PaperT}
                   elevation={0}

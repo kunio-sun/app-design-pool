@@ -154,7 +154,6 @@ const ImageOnlyPostList = (props) => {
         onClick={() => getImageNext()}>
         さらに表示</Button>
 
-      <h1>これは、ユーザ投稿詳細用のコンポーネントです</h1>
     </>
   );
 }

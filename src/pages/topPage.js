@@ -43,9 +43,8 @@ const TopPage = () => {
   // style変数
   const classes = useStyles();
   const { seachKey } = useParams();
-
-
   // console.log(seachKey)
+
   return (
     <div className={classes.page_wrap}>
       {/* <button onClick={() => dispatch(signInAction({
