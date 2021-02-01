@@ -154,7 +154,8 @@ const Head = (props) => {
 
   // useState フォーム入力情報保持---
 
-  const [seachKey, setSeachKey] = useState(props.seachKey);
+
+  const [seachKey, setSeachKey] = useState("");
 
   const setKey = (event) => {
     setSeachKey(event.target.value);
@@ -178,9 +179,9 @@ const Head = (props) => {
           <AppBar className={classes.header} >
             <Toolbar className={classes.header_bar}>
               <div className={classes.header_left}>
-                <div onClick={seachPost}>
+                <Link to="/home">
                   <img src={logo} alt="ロゴ" className={classes.header_logo} />
-                </div>
+                </Link>
                 <Paper
                   className={classes.Input_Paper}
                   elevation={0}
@@ -220,9 +221,9 @@ const Head = (props) => {
           <AppBar className={classes.header} >
             <Toolbar className={classes.header_bar}>
               <div className={classes.header_left}>
-                <div onClick={seachPost}>
+                <Link to="/home">
                   <img src={logoD} alt="ロゴ" className={classes.header_logo} />
-                </div>
+                </Link>
                 <Paper
                   className={classes.Input_PaperT}
                   elevation={0}

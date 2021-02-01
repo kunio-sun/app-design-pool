@@ -114,6 +114,11 @@ const HeadAfterLogin = () => {
   const setKey = (event) => {
     setSeachKey(event.target.value);
   }
+
+  const seachPost = () => {
+    history.push("/home" + seachKey)
+  }
+
   return (
     <>
       {/* パソコンサイズ */}
@@ -134,7 +139,7 @@ const HeadAfterLogin = () => {
                   className={classes.InputBace}
                   onChange={setKey}
                 />
-                <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
+                <IconButton size="medium" onClick={seachPost}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>
@@ -173,7 +178,7 @@ const HeadAfterLogin = () => {
                   className={classes.InputBaceT}
                   onChange={setKey}
                 />
-                <IconButton size="medium" onClick={() => history.push("/home" + seachKey)}>
+                <IconButton size="medium" onClick={seachPost}>
                   <SeachIcon fontSize="small" />
                 </IconButton>
               </Paper>

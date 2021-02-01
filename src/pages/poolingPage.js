@@ -1,5 +1,4 @@
 import React from "react";
-import Head from "../components/header";
 import { Redirect } from "react-router-dom"
 
 // import DummyWhite from "../images/dummyWhite.png";

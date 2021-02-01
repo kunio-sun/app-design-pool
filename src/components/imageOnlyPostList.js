@@ -47,7 +47,6 @@ const ImageOnlyPostList = () => {
   // app.jsのroute パス :keyNameを指定(props)
   const { seachKey } = useParams();
   // 画像取得が0かあるかのbool
-  let hasResponseImage;
 
   useEffect(() => {
     // imageViewの初期化
