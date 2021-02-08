@@ -177,6 +177,17 @@ const SignUpPage = () => {
         alert("アカウント作成に成功しました");
 
         const userData = res.data;
+
+        //localstrageに保存
+        localStorage.setItem("users", JSON.stringify({
+          isSignedIn: true,
+          icon: userData.icon,
+          uid: userData.user_id,
+          name: userData.name,
+          profile: userData.profile,
+          mail: userData.mail
+        }))
+        //reduxに登録
         dispatch(signInAction({
           uid: userData.user_id,
           username: userData.name,
@@ -184,7 +195,9 @@ const SignUpPage = () => {
           icon: userData.icon,
           profile: userData.profile
         }))
-        history.push("/home");
+        setTimeout(() => {
+          history.push("/home");
+        }, 1000)
       }
     }
     // console.log(submitFlag);

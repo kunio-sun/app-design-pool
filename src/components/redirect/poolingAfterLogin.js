@@ -165,8 +165,6 @@ const PoolingAfterLogin = () => {
 
   const loginState = loginStateCheck("poolingPageから")
 
-
-
   let [tagValue, setTagValue] = useState("");
   const changeTagValue = (event) => {
     setTagValue(event.target.value);
@@ -184,8 +182,7 @@ const PoolingAfterLogin = () => {
 
 
   var initialTagArray = [
-    loginState.name,
-    "portfolio"
+    "portfolio",
   ]
   const [tags, setTags] = useState(initialTagArray);
 
