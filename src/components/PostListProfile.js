@@ -66,6 +66,7 @@ const PostListProfile = (props) => {
       .then((res) => {
         // console.log("reaponseDataは", res.data);
         res.data.forEach((obj, index) => {
+
           // console.log(obj.img);
           getImageFile(obj.img);
           // last image filename を次検索のため格納
@@ -164,7 +165,7 @@ const PostListProfile = (props) => {
         className={classes.my_masonry_grid}
         columnClassName={classes.my_masonry_grid_column}
       >
-
+        {/* {console.log(images)} */}
         {images.map((row, index) => (
           <div className={classes.event_card} key={row.imageName}>
             <Button
@@ -177,6 +178,7 @@ const PostListProfile = (props) => {
             >
               <DeleteIcon fontSize="small" />
             </Button>
+
             <img src={row.imageData} alt={"画像" + row.imageName} className={classes.postImage} />
           </div>
         ))}

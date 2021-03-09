@@ -76,11 +76,11 @@ const LoginPage = () => {
   // LoginStateCheck();
 
   // useState フォーム入力情報保持---
-  const [mailVal, setFunc] = useState("changeMan@gmail.com");
+  const [mailVal, setFunc] = useState("");
   const setMailval = (event) => {
     setFunc(event.target.value);
   }
-  const [passVal, setPass] = useState("kuni4649");
+  const [passVal, setPass] = useState("");
   const setPassval = (event) => {
     setPass(event.target.value);
   }
